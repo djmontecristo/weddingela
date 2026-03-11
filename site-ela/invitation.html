@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>WeddingEla – Ψηφιακό προσκλητήριο γάμου</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <meta name="theme-color" content="#b79a58">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="WeddingEla">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/manifest.json">
+  <meta property="og:title" content="WeddingEla – Ψηφιακό προσκλητήριο γάμου">
+  <meta property="og:description" content="Δείτε το ψηφιακό προσκλητήριο, τις τοποθεσίες και επιβεβαιώστε την παρουσία σας.">
+  <meta property="og:image" content="https://weddingela.gr/share.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://weddingela.gr/invitation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WeddingEla">
+  <meta property="og:locale" content="el_GR">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WeddingEla – Ψηφιακό προσκλητήριο γάμου">
+  <meta name="twitter:description" content="Δείτε το ψηφιακό προσκλητήριο, τις τοποθεσίες και επιβεβαιώστε την παρουσία σας.">
+  <meta name="twitter:image" content="https://weddingela.gr/share.png">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&display=swap');
+
+    :root{
+      --bg: #f6f3ee;
+      --paper: #ffffff;
+      --ink: #1a1a1a;
+      --muted: rgba(0,0,0,.55);
+      --line: rgba(0,0,0,.08);
+
+      --accent: #b79a58;
+      --accent-soft: rgba(183,154,88,.22);
+
+      --maxw: 760px;
+      --radius: 14px;
+      --shadow: 0 20px 60px rgba(0,0,0,.08);
+
+      --sans: ui-sans-serif, -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial;
+      --serif-lux: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+    }
+
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 40px 18px;
+    }
+
+    .card{
+      width:100%;
+      max-width: var(--maxw);
+      background: var(--paper);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      padding: clamp(40px, 6vw, 80px);
+      text-align:center;
+    }
+
+    /* Couple names */
+
+    @keyframes fade{
+      to{
+        opacity:1;
+        transform:none;
+      }
+    }
+
+.names{
+  font-family: var(--serif-lux);
+  font-weight: 400;
+  letter-spacing: .08em;
+  font-size: clamp(48px, 7vw, 72px);
+  margin: 0;
+
+  /* gold gradient: αριστερά → δεξιά (σκούρο → ανοιχτό) */
+  background: linear-gradient(
+    90deg,
+    #8f743a 0%,
+    #b79a58 35%,
+    #d6bb74 65%,
+    #f3e6c9 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 3px 10px rgba(0,0,0,.18);
+
+  -webkit-font-smoothing: antialiased;
+
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fade 1s ease forwards;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.05;
+}
+
+    .names .name{
+      display: inline-block;
+      width: fit-content;
+      max-width: 100%;
+      text-align: center;
+
+      white-space: nowrap;
+      overflow-wrap: normal;
+      word-break: normal;
+      hyphens: none;
+
+      margin: 0.02em 0;
+    }
+
+.names .amp{
+  font-style: italic;
+  display: inline-block;
+  width: fit-content;
+  text-align: center;
+
+  font-size: 1.22em;
+  line-height: 1;
+
+  letter-spacing: .06em;
+  margin: 0.08em 0;
+
+  transform: translateY(-0.02em);
+
+  /* κρατά το ίδιο gradient */
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* λίγο πιο έντονο */
+  text-shadow: 0 1px 0 rgba(255,255,255,.35), 0 3px 8px rgba(0,0,0,.18);
+}
+
+    .subline{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      margin: 24px auto 32px;
+    }
+
+    .subline .line{
+      width: 60px;
+      height:1px;
+      background: var(--accent-soft);
+    }
+
+    .subline .dot{
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background: var(--accent);
+    }
+
+    /* Date + Time */
+    .leadDate{
+      white-space: pre-line;
+      display:block;
+
+      font-family: ui-serif, Georgia, serif;
+      font-weight: 700;
+      font-variant-numeric: lining-nums;
+      font-feature-settings: "lnum";
+
+      letter-spacing: .12em;
+      font-size: clamp(24px, 3vw, 36px);
+      color: rgba(183,154,88,.90);
+
+      margin-bottom: 20px;
+    }
+
+    .leadCountdown{
+      margin-top: -2px;
+      margin-bottom: 20px;
+      font-family: var(--serif-lux);
+      font-weight: 600;
+      letter-spacing: .08em;
+      font-size: clamp(20px, 2.2vw, 30px);
+      color: rgba(183,154,88,.92);
+      line-height:1.6;
+      white-space:normal;
+      text-align:center;
+    }
+
+    .cd-lines{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      line-height:1.4;
+      text-align:center;
+    }
+
+    .cd-line{
+      white-space:nowrap;
+    }
+
+    .cd-icon{
+      display:block;
+      text-align:center;
+      font-size:2em;
+      margin-bottom:4px;
+    }
+
+    .cd-num{
+      font-size: 1.75em;
+      font-weight: 700;
+      letter-spacing: .04em;
+    }
+
+    .lead{
+      max-width: 480px;
+      margin: 0 auto;
+      font-family: var(--serif-lux);
+      font-weight: 300;
+      font-size: 22px;
+      line-height: 1.8;
+      color: rgba(40,40,40,.85);
+    }
+
+    /* Sections */
+    .section{
+      position: relative;
+      margin-top: 64px;
+      padding-top: 34px;
+    }
+
+    .section::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:140px;
+      height:1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(183,154,88,.45),
+        rgba(183,154,88,.9),
+        rgba(183,154,88,.45),
+        transparent
+      );
+    }
+
+    .section::after{
+      content:"";
+      position:absolute;
+      top:-4px;
+      left:50%;
+      transform:translateX(-50%);
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background: rgba(183,154,88,.9);
+      box-shadow: 0 0 0 4px rgba(183,154,88,.12);
+    }
+
+    .section .row{ margin-bottom: 24px; }
+    #ceremonyRow{ margin-bottom: 28px; }
+    #familiesRow{ margin-bottom: 28px; }
+
+    .k{
+      font-family: var(--serif-lux);
+      font-weight: 500;
+      letter-spacing: .22em;
+      font-size: 13px;
+      color: rgba(183,154,88,.95);
+      margin-bottom: 6px;
+    }
+
+    .v{
+      font-family: var(--serif-lux);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: .04em;
+    }
+
+    a.link{
+      display:inline-block;
+      margin-top: 14px;
+      font-family: var(--serif-lux);
+      letter-spacing: .12em;
+      font-size: 12px;
+      text-decoration:none;
+
+      border: 1px solid rgba(183,154,88,.35);
+      background: transparent;
+      color: rgba(183,154,88,.95);
+      padding: 10px 14px;
+      border-radius: 999px;
+
+      transition: all .25s ease;
+    }
+
+    a.link:hover{
+      background: rgba(183,154,88,.08);
+      border-color: rgba(183,154,88,.65);
+    }
+
+    /* IBAN */
+    .ibanBox{ margin-top: 10px; }
+    .ibanText{ font-size: 15px; font-family: var(--sans); }
+
+    .btnCopy{
+      margin-top:10px;
+      display: inline-block;
+      width: auto;
+      background: transparent;
+
+      border: 1px solid rgba(183,154,88,.35);
+      color: rgba(183,154,88,.95);
+
+      font-family: var(--serif-lux);
+      letter-spacing: .10em;
+      font-size: 11px;
+
+      padding: 4px 10px;
+      border-radius: 999px;
+
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+
+    .btnCopy:hover{
+      background: rgba(183,154,88,.08);
+      border-color: rgba(183,154,88,.65);
+      transform: translateY(-1px);
+    }
+
+    /* RSVP modal */
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.25);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index: 50;
+    }
+
+    .modalOverlay.open{ display:flex; }
+
+    .modal{
+      background:#fff;
+      border-radius: var(--radius);
+      padding: 26px;
+      width: 90%;
+      max-width: 420px;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .modalHead{
+      font-family: var(--serif-lux);
+      font-size:20px;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .iconBtn{
+      border:none;
+      background: transparent;
+      font-size: 18px;
+      cursor:pointer;
+      opacity:.7;
+    }
+
+    .iconBtn:hover{ opacity:1; }
+
+    .field{ margin-top:14px; }
+
+    input, select{
+      width:100%;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      font-family: var(--sans);
+      box-sizing: border-box;
+    }
+
+    .primary{
+      margin-top:18px;
+      width:100%;
+      padding:12px;
+      border:none;
+      background: var(--ink);
+      color:#fff;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .secondary{
+      margin-top:8px;
+      width:100%;
+      padding:10px;
+      border:1px solid var(--line);
+      background:none;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    #rsvpLine{
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    #rsvpLine a{
+      color: rgba(183,154,88,.95);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+      font-weight: 700;
+    }
+
+    #rsvpLine a:hover{ opacity: .7; }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(26,26,26,.95);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .25s ease;
+      z-index: 100;
+    }
+
+    .toast.show{
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body class="pageInvitation">
+  <main class="wrap" aria-live="polite">
+    <article class="card">
+      <header class="hero">
+        <h1 class="names" id="names">—</h1>
+
+        <div class="subline" aria-hidden="true">
+          <div class="line"></div>
+          <div class="dot"></div>
+          <div class="line"></div>
+        </div>
+
+        <div class="lead" id="customText"></div>
+      </header>
+
+      <!-- LOCATIONS -->
+      <div class="section two" id="locations">
+        <div class="row" id="ceremonyRow">
+          <div class="k" id="ceremonyLabel">Μυστήριο</div>
+          <div class="v" id="ceremonyPlace">—</div>
+          <a class="link" id="ceremonyLink" href="#" target="_blank" rel="noopener" aria-disabled="true">Πλοήγηση</a>
+        </div>
+
+        <div class="row" id="receptionRow">
+          <div class="k">Δεξίωση</div>
+          <div class="v" id="receptionPlace">—</div>
+          <a class="link" id="receptionLink" href="#" target="_blank" rel="noopener" aria-disabled="true">Πλοήγηση</a>
+        </div>
+      </div>
+
+      <!-- FAMILIES / KOUMBAROI -->
+      <div class="section" id="metaSection" style="display:none;">
+        <div class="two">
+          <div class="row" id="familiesRow" style="display:none;">
+            <div class="k">Οικογένειες</div>
+            <div class="v" id="familiesText">—</div>
+          </div>
+
+          <div class="row" id="koumbaroiRow" style="display:none;">
+            <div class="k" id="koumbaroiLabel">Κουμπάρος</div>
+            <div class="v" id="koumbaroiText">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IBAN -->
+      <div class="section" id="ibanSection" style="display:none;">
+        <div class="row">
+          <div class="k">Προαιρετική λίστα γάμου</div>
+          <div class="ibanBox">
+            <div class="ibanText" id="ibanText" style="display:none;"></div>
+            <button class="btnCopy" id="copyIbanBtn" type="button">Copy IBAN</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <div class="modalOverlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="RSVP" aria-hidden="true">
+    <div class="modal" id="rsvpModal">
+      <div class="modalHead">
+        <div class="title">RSVP</div>
+        <button class="iconBtn" id="closeModalBtn" type="button" aria-label="Κλείσιμο">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <p class="hint" id="rsvpHint">Παρακαλούμε επιβεβαιώστε αν θα παρευρεθείτε.</p>
+
+        <div class="field">
+          <label for="guestName">Ονοματεπώνυμο</label>
+          <input id="guestName" type="text" autocomplete="name" inputmode="text" placeholder="π.χ. Γιώργος Παπαδόπουλος" />
+        </div>
+
+        <div class="field">
+          <label for="attending">Θα παρευρεθείτε;</label>
+          <select id="attending">
+            <option value="yes">Ναι</option>
+            <option value="no">Όχι</option>
+          </select>
+        </div>
+
+        <div class="field" id="guestsField">
+          <label for="guestCount">Πόσα άτομα;</label>
+          <input id="guestCount" type="number" min="0" max="20" inputmode="numeric" value="1" />
+        </div>
+
+        <div class="field" id="noteField">
+          <label for="guestNote">Αλλεργίες ή διατροφικές προτιμήσεις (προαιρετικό)</label>
+          <input id="guestNote" type="text" autocomplete="off" placeholder="π.χ. αλλεργία σε ξηρούς καρπούς, vegetarian, vegan" />
+        </div>
+
+        <div class="actions">
+          <button class="secondary" id="cancelBtn" type="button">Άκυρο</button>
+          <button class="primary" id="submitBtn" type="button">Αποστολή</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const WORKER_BASE = "";
+    const qs = new URLSearchParams(location.search);
+    const token = (qs.get("t") || "").trim().toLowerCase();
+    const noReception = qs.get("nr") === "1";
+    const previewMode = qs.get("preview") === "1";
+
+    function $(id){ return document.getElementById(id); }
+
+    function toast(msg){
+      const t = $("toast");
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.add("show");
+      setTimeout(function(){ t.classList.remove("show"); }, 1600);
+    }
+
+    function safeText(el, value, fallback){
+      if(!el) return;
+      const v = (value ?? "").toString().trim();
+      el.textContent = v || (fallback || "—");
+    }
+
+    function setLink(a, href){
+      if(!a) return;
+      const h = (href || "").toString().trim();
+
+      if (h){
+        a.href = h;
+        a.style.display = "inline-block";
+        a.setAttribute("aria-disabled","false");
+        a.style.pointerEvents = "auto";
+        a.style.opacity = "1";
+      } else {
+        a.href = "#";
+        a.style.display = "none";
+        a.setAttribute("aria-disabled","true");
+        a.style.pointerEvents = "none";
+        a.style.opacity = "1";
+      }
+    }
+
+    function monthNameEL(monthIndex){
+      const months = [
+        "Ιανουαρίου","Φεβρουαρίου","Μαρτίου","Απριλίου","Μαΐου","Ιουνίου",
+        "Ιουλίου","Αυγούστου","Σεπτεμβρίου","Οκτωβρίου","Νοεμβρίου","Δεκεμβρίου"
+      ];
+      return months[monthIndex] || "";
+    }
+
+    function formatEventDateGreek(anyDate){
+      const s = (anyDate || "").toString().trim();
+      if(!s) return "—";
+
+      let m = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if(m){
+        const y = Number(m[1]);
+        const mo = Number(m[2]) - 1;
+        const d = Number(m[3]);
+        if(y && mo >= 0 && mo <= 11 && d) return d + " " + monthNameEL(mo) + " " + y;
+        return s;
+      }
+
+      m = s.match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);
+      if(m){
+        const d = Number(m[1]);
+        const mo = Number(m[2]) - 1;
+        const y = Number(m[3]);
+        if(y && mo >= 0 && mo <= 11 && d) return d + " " + monthNameEL(mo) + " " + y;
+        return s;
+      }
+
+      return s;
+    }
+
+    function formatDM(iso){
+      const m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if(!m) return "";
+      return `${Number(m[3])}/${Number(m[2])}/${m[1]}`;
+    }
+
+    function normalizeIban(s){
+      return (s || "").toString().replace(/\s+/g, "").trim();
+    }
+
+    async function api(path, opts){
+      const o = opts || {};
+      const res = await fetch(WORKER_BASE + path, {
+        method: o.method || "GET",
+        body: o.body,
+        headers: { "content-type":"application/json", ...(o.headers || {}) }
+      });
+
+      const data = await res.json().catch(function(){ return {}; });
+      if(!res.ok) throw new Error(data && data.error ? data.error : ("HTTP " + res.status));
+      return data;
+    }
+
+    const overlay = $("modalOverlay");
+    const closeModalBtn = $("closeModalBtn");
+    const cancelBtn = $("cancelBtn");
+    const attending = $("attending");
+    const guestsField = $("guestsField");
+    const noteField = $("noteField");
+    const submitBtn = $("submitBtn");
+
+    function openModal(){
+      if (!overlay) return;
+      overlay.classList.add("open");
+      overlay.setAttribute("aria-hidden","false");
+      setTimeout(function(){ $("guestName")?.focus(); }, 50);
+    }
+
+    function closeModal(){
+      if (!overlay) return;
+      overlay.classList.remove("open");
+      overlay.setAttribute("aria-hidden","true");
+    }
+
+    function updateGuestFieldsVisibility(){
+      if (!attending) return;
+      const yes = attending.value === "yes";
+
+      if (guestsField) guestsField.style.display = yes ? "grid" : "none";
+      if (noteField) noteField.style.display = yes ? "grid" : "none";
+
+      const gc = $("guestCount");
+      if (gc) gc.value = yes ? (gc.value || "1") : "0";
+    }
+
+    overlay?.addEventListener("click", function(e){
+      if(e.target === overlay) closeModal();
+    });
+
+    closeModalBtn?.addEventListener("click", closeModal);
+    cancelBtn?.addEventListener("click", closeModal);
+    attending?.addEventListener("change", updateGuestFieldsVisibility);
+
+    function buildLeadText(workerData){
+      const presets = {
+        "1": "Save the Date! Θα είναι τιμή μας να μοιραστείτε μαζί μας αυτή τη μέρα.",
+        "2": "Με χαρά σας προσκαλούμε να γιορτάσετε μαζί μας την πιο όμορφη στιγμή της ζωής μας.",
+        "3": "Σας περιμένουμε να μοιραστούμε αγάπη, χαμόγελα και μια αξέχαστη βραδιά."
+      };
+
+      const rawChoice = String(workerData?.intro?.choice ?? "1").trim();
+      const choice = rawChoice.toLowerCase();
+      const custom = String(workerData?.intro?.custom || "").trim();
+
+      let mainText = presets["1"];
+      if (choice === "custom" && custom) mainText = custom;
+      else if (presets[rawChoice]) mainText = presets[rawChoice];
+      else if (presets[choice]) mainText = presets[choice];
+
+      const rsvpEnabled = Boolean(workerData?.rsvp?.enabled);
+      if (!rsvpEnabled){
+        return { mainText, untilPart: "", showRsvpLine: false };
+      }
+
+      const ddlISO = String(workerData?.rsvp?.deadline || "").trim();
+      const ddlDM = ddlISO ? formatDM(ddlISO) : "";
+      const untilPart = ddlDM ? (" έως " + ddlDM) : "";
+
+      return { mainText, untilPart, showRsvpLine: true };
+    }
+
+    function setLines(el, lines){
+      if (!el) return;
+      el.textContent = "";
+      lines.forEach((txt, i) => {
+        el.appendChild(document.createTextNode(txt));
+        if (i < lines.length - 1) el.appendChild(document.createElement("br"));
+      });
+    }
+
+    function appendNameWithControlledBreaks(el, fullName){
+      const parts = String(fullName || "").trim().split(/\s+/).filter(Boolean);
+
+      if (!parts.length){
+        el.textContent = "";
+        return;
+      }
+
+      parts.forEach((part, i) => {
+        const span = document.createElement("span");
+        span.textContent = part;
+        el.appendChild(span);
+
+        if (i < parts.length - 1){
+          el.appendChild(document.createTextNode(" "));
+          el.appendChild(document.createElement("wbr"));
+        }
+      });
+    }
+
+    function shrinkNamesToFit(){
+      const namesEl = $("names");
+      if (!namesEl) return;
+
+      const nameEls = [...namesEl.querySelectorAll(".name")];
+      if (!nameEls.length) return;
+
+      nameEls.forEach(el => {
+        el.style.fontSize = "";
+        el.style.whiteSpace = "nowrap";
+      });
+
+      let size = parseFloat(getComputedStyle(nameEls[0]).fontSize);
+      const minSize = 36;
+
+      function overflow(){
+        return nameEls.some(el => el.scrollWidth > el.clientWidth);
+      }
+
+      while (overflow() && size > minSize){
+        size -= 1;
+        nameEls.forEach(el => {
+          el.style.fontSize = size + "px";
+        });
+      }
+
+      if (!overflow()) return;
+
+      nameEls.forEach(el => {
+        el.style.whiteSpace = "normal";
+      });
+    }
+
+    function render(workerData){
+      const g = String(workerData?.couple?.groom_name || "").trim();
+      const b = String(workerData?.couple?.bride_name || "").trim();
+      const namesEl = $("names");
+
+      if (namesEl){
+        namesEl.textContent = "";
+
+        if (g && b){
+          const groomSpan = document.createElement("span");
+          groomSpan.className = "name";
+          appendNameWithControlledBreaks(groomSpan, g);
+
+          const ampSpan = document.createElement("span");
+          ampSpan.className = "amp";
+          ampSpan.textContent = "&";
+
+          const brideSpan = document.createElement("span");
+          brideSpan.className = "name";
+          appendNameWithControlledBreaks(brideSpan, b);
+
+          namesEl.appendChild(groomSpan);
+          namesEl.appendChild(ampSpan);
+          namesEl.appendChild(brideSpan);
+
+          requestAnimationFrame(shrinkNamesToFit);
+        } else if (g || b) {
+          const nameSpan = document.createElement("span");
+          nameSpan.className = "name";
+          appendNameWithControlledBreaks(nameSpan, g || b);
+          namesEl.appendChild(nameSpan);
+
+          requestAnimationFrame(shrinkNamesToFit);
+        } else {
+          namesEl.textContent = "—";
+        }
+      }
+
+      const lead = buildLeadText(workerData);
+      const customTextEl = $("customText");
+      if (!customTextEl) return;
+
+      customTextEl.innerHTML = "";
+
+      const dateText = formatEventDateGreek(workerData.wedding_date);
+      const timeText = (workerData.wedding_time || "").toString().trim();
+      const whenText = timeText ? (dateText + "\n" + timeText) : dateText;
+
+      const mainSpan = document.createElement("span");
+      mainSpan.textContent = lead.mainText;
+      customTextEl.appendChild(mainSpan);
+
+      customTextEl.appendChild(document.createElement("br"));
+      customTextEl.appendChild(document.createElement("br"));
+
+      const dateEl = document.createElement("span");
+      dateEl.className = "leadDate";
+      dateEl.textContent = whenText;
+      customTextEl.appendChild(dateEl);
+
+      if (Number(workerData.countdown_enabled) === 1 && workerData.wedding_date) {
+        const countdownEl = document.createElement("div");
+        countdownEl.className = "leadCountdown";
+        customTextEl.appendChild(countdownEl);
+
+        const target = new Date(
+          workerData.wedding_date + "T" + (workerData.wedding_time || "18:00")
+        ).getTime();
+
+        function updateCountdown(){
+          const now = Date.now();
+          const diff = target - now;
+
+          if (diff <= 0) {
+            const since = now - target;
+            const eventMidnight = new Date(workerData.wedding_date + "T00:00:00").getTime();
+            const nextMidnight = eventMidnight + 24 * 60 * 60 * 1000;
+
+            if (since < 60 * 60 * 1000) {
+              countdownEl.innerHTML = `Παντρευόμαστε τώρα! 🤍`;
+            } else if (now < nextMidnight) {
+              countdownEl.innerHTML = `
+                Παντρευτήκαμε! 🤍<br>
+                Πάμε να το γιορτάσουμε...
+              `;
+            } else {
+              countdownEl.innerHTML = `
+                Παντρευτήκαμε! 🤍<br>
+                Σας ευχαριστούμε που μοιραστήκατε μαζί μας αυτή την υπέροχη ημέρα!!!
+              `;
+            }
+            return;
+          }
+
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((diff / (1000 * 60)) % 60);
+          const seconds = Math.floor((diff / 1000) % 60);
+
+          const line1 = [];
+          const line2 = [];
+
+          if (days > 0) line1.push(`<span class="cd-num">${days}</span> ${days === 1 ? "ημέρα" : "ημέρες"}`);
+          if (hours > 0 || days > 0) line1.push(`<span class="cd-num">${String(hours).padStart(2,"0")}</span> ${hours === 1 ? "ώρα" : "ώρες"}`);
+
+          if (minutes > 0 || hours > 0 || days > 0) line2.push(`<span class="cd-num">${String(minutes).padStart(2,"0")}</span> ${minutes === 1 ? "λεπτό" : "λεπτά"}`);
+          line2.push(`<span class="cd-num">${String(seconds).padStart(2,"0")}</span> δευτ.`);
+
+          countdownEl.innerHTML = `
+            <div class="cd-icon">⏳</div>
+            <div class="cd-lines">
+              <div class="cd-line">${line1.join(" · ")}</div>
+              <div class="cd-line">${line2.join(" · ")}</div>
+            </div>
+          `;
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+
+      const rawAllowed = workerData?.rsvp?.allowed;
+      const rsvpAllowed = rawAllowed === true || rawAllowed === "true" || rawAllowed === 1 || rawAllowed === "1";
+
+      const rsvpLine = document.createElement("p");
+      rsvpLine.id = "rsvpLine";
+      rsvpLine.style.display = rsvpAllowed ? "" : "none";
+
+      const rsvpLink = document.createElement("a");
+      rsvpLink.id = "rsvpLink";
+      rsvpLink.href = "#";
+      rsvpLink.textContent = "εδώ";
+      rsvpLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (rsvpAllowed) openModal();
+      });
+
+      rsvpLine.appendChild(document.createTextNode(
+        "Παρακαλούμε επιβεβαιώστε την παρουσία σας" + (lead.untilPart || "") + " "
+      ));
+      rsvpLine.appendChild(rsvpLink);
+      customTextEl.appendChild(rsvpLine);
+
+      // families / koumbaroi
+      const groomParents = (workerData?.families?.groom_parents || "").trim();
+      const brideParents = (workerData?.families?.bride_parents || "").trim();
+
+      const familiesRow = $("familiesRow");
+      const familiesText = $("familiesText");
+      const koumbaroiRow = $("koumbaroiRow");
+      const koumbaroiLabel = $("koumbaroiLabel");
+      const koumbaroiText = $("koumbaroiText");
+      const metaSection = $("metaSection");
+
+      const famLines = [];
+      if (groomParents) famLines.push(groomParents);
+      if (brideParents) famLines.push(brideParents);
+
+      if (famLines.length) {
+        setLines(familiesText, famLines);
+        familiesRow.style.display = "grid";
+      } else {
+        familiesRow.style.display = "none";
+      }
+
+      const mode = String(workerData?.koumbaroi?.type || "koumbaros").trim().toLowerCase();
+      const ks = [workerData?.koumbaroi?.k1, workerData?.koumbaroi?.k2, workerData?.koumbaroi?.k3]
+        .map(v => String(v || "").trim())
+        .filter(Boolean);
+
+      if (ks.length) {
+        if (mode === "koumpara") koumbaroiLabel.textContent = "Κουμπάρα";
+        else if (mode === "koumbaroi") koumbaroiLabel.textContent = "Κουμπάροι";
+        else koumbaroiLabel.textContent = "Κουμπάρος";
+
+        setLines(koumbaroiText, ks);
+        koumbaroiRow.style.display = "grid";
+      } else {
+        koumbaroiRow.style.display = "none";
+      }
+
+      metaSection.style.display = (famLines.length || ks.length) ? "block" : "none";
+
+      // Ceremony + Reception
+      safeText($("ceremonyPlace"), workerData.venue, "Τοποθεσία: θα ανακοινωθεί");
+      setLink($("ceremonyLink"), workerData.venue_maps_url);
+      $("ceremonyRow").style.display =
+        ((workerData.venue || "").trim() || (workerData.venue_maps_url || "").trim()) ? "grid" : "none";
+
+      if (noReception){
+        $("receptionRow").style.display = "none";
+      } else {
+        safeText($("receptionPlace"), workerData.reception_venue, "—");
+        setLink($("receptionLink"), workerData.reception_maps_url);
+        $("receptionRow").style.display =
+          ((workerData.reception_venue || "").trim() || (workerData.reception_maps_url || "").trim()) ? "grid" : "none";
+      }
+
+      // IBAN
+      const ibanRaw = (workerData.iban || "").toString().trim();
+      if (ibanRaw) {
+        const iban = normalizeIban(ibanRaw);
+        $("ibanSection").style.display = "block";
+        $("ibanText").style.display = "block";
+        $("ibanText").textContent = iban;
+
+        $("copyIbanBtn").onclick = async function () {
+          try{
+            await navigator.clipboard.writeText(iban);
+            toast("Αντιγράφηκε");
+          } catch(e){
+            const ta = document.createElement("textarea");
+            ta.value = iban;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+            toast("Αντιγράφηκε");
+          }
+        };
+      } else {
+        $("ibanSection").style.display = "none";
+      }
+
+      updateGuestFieldsVisibility();
+
+      if (submitBtn) {
+        submitBtn.onclick = async function () {
+          if (!rsvpAllowed) return;
+
+          const name = $("guestName")?.value?.trim() || "";
+          const att = attending?.value || "yes";
+          const party_size = (att === "yes") ? Number($("guestCount")?.value || 1) : 0;
+          const note = $("guestNote")?.value?.trim() || "";
+
+          if (!name) {
+            toast("Βάλε ονοματεπώνυμο");
+            $("guestName")?.focus();
+            return;
+          }
+
+          if (att === "yes" && (!Number.isFinite(party_size) || party_size < 1 || party_size > 20)) {
+            toast("Βάλε σωστό αριθμό");
+            $("guestCount")?.focus();
+            return;
+          }
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Αποστολή...";
+
+          try {
+            await api("/api/rsvp/submit", {
+              method: "POST",
+              body: JSON.stringify({ t: token, name, attending: att, party_size, note })
+            });
+
+            toast("Εστάλη");
+            closeModal();
+
+            const guestNameEl = $("guestName");
+            const guestCountEl = $("guestCount");
+            const guestNoteEl = $("guestNote");
+
+            if (guestNameEl) guestNameEl.value = "";
+            if (attending) attending.value = "yes";
+            if (guestCountEl) guestCountEl.value = "1";
+            if (guestNoteEl) guestNoteEl.value = "";
+
+            updateGuestFieldsVisibility();
+          } catch (e) {
+            console.error(e);
+            toast(e?.message ? e.message : "Σφάλμα αποστολής");
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Αποστολή";
+          }
+        };
+      }
+    }
+
+    window.addEventListener("resize", function(){
+      requestAnimationFrame(shrinkNamesToFit);
+    });
+
+    (async function init(){
+      try{
+        if(!token){
+          const n = $("names");
+          const c = $("customText");
+          if (n) n.textContent = "Το link δεν είναι έγκυρο";
+          if (c) c.textContent = "";
+          closeModal();
+          return;
+        }
+
+        const data = await api(
+          "/api/invitation?t=" + encodeURIComponent(token) +
+          (previewMode ? "&preview=1" : "")
+        );
+
+        render(data);
+      } catch (e){
+        console.error(e);
+        const msg = String(e && e.message ? e.message : e);
+
+        if (msg.includes("No form data yet")) $("names").textContent = "Δεν έχουν συμπληρωθεί στοιχεία ακόμη";
+        else if (msg.includes("Invalid / disabled token")) $("names").textContent = "Μη έγκυρο link";
+        else if (msg.includes("Expired")) $("names").textContent = "Το link έληξε";
+        else $("names").textContent = "Προσωρινό πρόβλημα";
+
+        $("customText").textContent = "";
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin • Archives</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c6a86b">
+<link rel="apple-touch-icon" href="/icon-192.png">
+</head>
+<body class="pageAdmin" data-theme="ivory-gold">
+<img class="kicker" src="/images/weddingela-logo.png" alt="WeddingEla">
+  <main class="shell">
+    <header class="topbar">
+<div class="brand">
+  <h1 class="title">Archives</h1>
+  <p class="sub">Αρχειοθετημένα events.</p>
+</div>
+      <div class="top-actions">
+        <a class="btn ghost" href="/admin.html">← Admin</a>
+      </div>
+    </header>
+
+    <section class="card" id="loginCard">
+      <div class="row row-2">
+        <div class="field">
+          <label>Admin Password</label>
+          <input id="pw" class="input" type="password" autocomplete="current-password" placeholder="••••••••">
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn primary" id="btnLogin" type="button">Login</button>
+          <div class="hint" id="status"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="panel" style="display:none;">
+<div class="row" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap;">
+  <button class="btn soft" id="btnRefresh" type="button">Refresh</button>
+
+  <div style="display:flex; gap:12px; align-items:center;">
+    <div class="btn ghost" id="totalPaid">—</div>
+    <button class="btn ghost" id="btnLogout" type="button">Logout</button>
+  </div>
+</div>
+
+      <div class="divider"></div>
+
+      <div style="overflow:auto;">
+        <table class="tbl" style="min-width:720px;">
+          <thead>
+  			<tr>
+    			<th>Created Date</th>
+    			<th>Event Date</th>
+    			<th>Ζευγάρι</th>
+    			<th>Paid</th>
+  			</tr>
+			</thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+<script>
+
+(() => {
+  const WORKER_BASE = "";
+  const API = (p) => WORKER_BASE + p;
+
+  const $ = (id) => document.getElementById(id);
+const statusEl = $("status");
+const rowsEl = $("rows");
+const loginCard = $("loginCard");
+const panel = $("panel");
+const totalPaidEl = $("totalPaid");
+function setAuthUI(logged) {
+  loginCard.style.display = logged ? "none" : "";
+  panel.style.display = logged ? "" : "none";
+}
+
+let ADMIN_SESSION = localStorage.getItem("ADMIN_SESSION") || "";
+setAuthUI(!!ADMIN_SESSION);
+const hint = (msg = "", ok = true) => {
+  statusEl.textContent = msg;
+  statusEl.className = "hint " + (ok ? "" : "bad");
+};
+
+async function api(path, opts = {}) {
+  const headers = { "content-type": "application/json", ...(opts.headers || {}) };
+  if (ADMIN_SESSION) headers.authorization = "Bearer " + ADMIN_SESSION;
+
+  const res = await fetch(API(path), { ...opts, headers });
+
+  // ✅ safe parse (χωρίς crash αν δεν είναι JSON)
+  const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    // ✅ αν έληξε/άκυρο session: το καθαρίζουμε (για να ξαναδεί login)
+    if (res.status === 401) {
+      ADMIN_SESSION = "";
+      localStorage.removeItem("ADMIN_SESSION");
+    }
+    throw new Error(data?.error || `HTTP ${res.status}`);
+  }
+
+  return data;
+}
+
+const fmtDMY = (iso) => {
+  if (!iso) return "—";
+  const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${Number(m[3])}-${Number(m[2])}-${m[1]}` : iso;
+};
+
+const safe = (s) =>
+  String(s || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+function render(items){
+  let total = 0;
+  for (const it of items) {
+    if (it.paid_amount != null) {
+      total += Number(it.paid_amount);
+    }
+  }
+  if (totalPaidEl) {
+    totalPaidEl.textContent = String(total);
+  }
+
+  if (!items.length){
+    rowsEl.innerHTML = `<tr><td colspan="5" class="muted">Δεν υπάρχουν archived.</td></tr>`;
+    return;
+  }
+
+rowsEl.innerHTML = items.map(it => {
+  const g = safe(it?.couple?.groom_name || "");
+  const b = safe(it?.couple?.bride_name || "");
+  const couple = (g && b) ? `${g} & ${b}` : (g || b || "—");
+
+  const prefRaw = String(it.partner_ref || "").trim();
+  const prefTag = prefRaw ? (prefRaw.startsWith("p") ? prefRaw : ("p" + prefRaw)) : "";
+
+  const paid = (it.paid_amount == null)
+    ? ("Not Paid" + (prefTag ? (" " + prefTag) : ""))
+    : (String(it.paid_amount) + (prefTag ? prefTag : ""));
+
+  return `
+  <tr>
+    <td>${fmtDMY(it.created_date)}</td>
+    <td>${fmtDMY(it.event_date)}</td>
+    <td>${couple}</td>
+    <td>${paid}</td>
+    <td>
+      <button
+        class="btn ghost"
+        data-arch-del="${safe(it.form_token)}"
+        type="button"
+      >Del</button>
+    </td>
+  </tr>
+  `;
+}).join("");
+}
+
+  async function refresh(){
+    rowsEl.innerHTML = `<tr><td colspan="5" class="muted">Loading…</td></tr>`;
+    const data = await api("/api/admin/archive/list", { method:"GET" });
+    render(data.items || []);
+  }
+
+  async function login(){
+    const pw = ($("pw").value || "").trim();
+    if (!pw) return hint("Βάλε password.", false);
+
+    hint("Logging in…", true);
+
+    try{
+      const res = await fetch(API("/api/admin/login"), {
+        method:"POST",
+        headers:{ "content-type":"application/json" },
+        body: JSON.stringify({ password: pw })
+      });
+
+      const data = await res.json().catch(()=> ({}));
+      if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+
+      ADMIN_SESSION = String(data.session_token || "");
+      localStorage.setItem("ADMIN_SESSION", ADMIN_SESSION);
+      loginCard.style.display = "none";
+      panel.style.display = "";
+      hint("OK ✅", true);
+      await refresh();
+    }catch(e){
+      ADMIN_SESSION = "";
+      hint(e?.message || "Login failed", false);
+    }
+  }
+
+  function logout(){
+    ADMIN_SESSION = "";
+    localStorage.removeItem("ADMIN_SESSION");
+    $("pw").value = "";
+    panel.style.display = "none";
+    loginCard.style.display = "";
+    rowsEl.innerHTML = "";
+    hint("Logged out.", true);
+  }
+
+  $("btnLogin").addEventListener("click", login);
+  $("btnRefresh").addEventListener("click", () => refresh().catch(e => hint(e.message, false)));
+  $("btnLogout").addEventListener("click", logout);
+  
+rowsEl.addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-arch-del]");
+  if (!btn) return;
+
+  const token = btn.getAttribute("data-arch-del");
+  if (!token) return;
+
+  const ok = confirm("Οριστική διαγραφή από το archive;");
+  if (!ok) return;
+
+  try {
+    await api("/api/admin/archive/delete", {
+      method: "POST",
+      body: JSON.stringify({ form_token: token })
+    });
+
+    const tr = btn.closest("tr");
+
+    const amountText = tr?.querySelector("td:nth-child(4)")?.firstChild?.textContent?.trim();
+    if (amountText && amountText !== "Not Paid") {
+      const n = Number(amountText);
+      if (!Number.isNaN(n)) {
+        totalPaidEl.textContent = String(Number(totalPaidEl.textContent || "0") - n);
+      }
+    }
+
+    tr?.remove();
+  } catch (err) {
+    hint(err.message || "Delete failed", false);
+  }
+});
+
+if (ADMIN_SESSION) {
+  loginCard.style.display = "none";
+  panel.style.display = "";
+  refresh().catch(e => hint(e.message, false));
+} else {
+  loginCard.style.display = "";
+  panel.style.display = "none";
+}
+})();
+</script>
+</body>
+</html>

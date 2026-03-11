@@ -1,0 +1,811 @@
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Form</title>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <meta name="theme-color" content="#c6a86b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="WeddingEla">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <style>
+    .pageForm .card > .row { margin-bottom: 18px; }
+    .pageForm .labelSmall { opacity: .75; font-size: 12px; }
+    .pageForm .miniHint { opacity:.75; font-size: 12px; margin-top: 6px; }
+
+    /* Actions grid 2x2 */
+    .actionsGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+
+    /* Save πιάνει όλο το πλάτος */
+    .actionsGrid #btnSave{ grid-column: 1 / -1; }
+
+    /* Payment επίσης full width */
+    .actionsGrid #btnPay{ grid-column: 1 / -1; }
+
+    /* status full width */
+    .actionsGrid #status{ grid-column: 1 / -1; }
+
+    /* notPaid: κρύψε τα invitation buttons */
+    .actionsGrid.notPaid #openInvitation,
+    .actionsGrid.notPaid #openRsvp,
+    .actionsGrid.notPaid #btnSendInvitation,
+    .actionsGrid.notPaid #btnSendNoReception{
+      display:none;
+    }
+
+    /* paid: κρύψε πληρωμή */
+    .actionsGrid.paid #btnPay{ display:none; }
+
+    @media (max-width: 420px){
+      .actionsGrid{ grid-template-columns: 1fr; }
+      .actionsGrid #status{ grid-column: 1; }
+    }
+
+    /* Small switch */
+    .toggleline{ display:flex; gap:10px; align-items:center; }
+    .switch{ position:relative; width:44px; height:26px; display:inline-block; }
+    .switch input{ display:none; }
+    .slider{
+      position:absolute; inset:0;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(0,0,0,.14);
+      border-radius: 999px;
+      cursor:pointer;
+      transition: all .15s ease;
+    }
+    .slider::after{
+      content:"";
+      position:absolute;
+      width: 20px; height: 20px;
+      left: 3px; top: 2px;
+      background: rgba(0,0,0,.22);
+      border-radius: 50%;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    /* ✅ green ON */
+    .switch input:checked + .slider{
+      background: rgba(120,170,120,.25);
+      border-color: rgba(120,170,120,.45);
+    }
+    .switch input:checked + .slider::after{
+      transform: translateX(18px);
+      background: #fff;
+    }
+  </style>
+</head>
+<body class="pageForm" data-theme="ivory-gold">
+<img class="kicker" src="/images/weddingela-logo.png" alt="WeddingEla">
+  <main class="shell">
+    <section class="card" id="formCard">
+      <!-- ΖΕΥΓΑΡΙ -->
+      <div class="row">
+        <div class="field">
+          <label>Ζευγάρι</label>
+          <div class="row row-2">
+            <input id="groom_first" class="input" placeholder="Όνομα γαμπρού (π.χ. Στέλιος)" autocomplete="off">
+            <input id="bride_first" class="input" placeholder="Όνομα νύφης (π.χ. Παναγιώτα)" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ΟΙΚΟΓΕΝΕΙΕΣ -->
+      <div class="row">
+        <div class="field">
+          <label>Οικογένειες (γονείς)</label>
+          <div class="miniHint">Γράψε όπως θέλεις να εμφανίζεται (π.χ. “Μπάμπη και Μαρίας …”).</div>
+          <div class="row row-2" style="margin-top:10px;">
+            <input id="groom_parents" class="input" placeholder="Γονείς γαμπρού" autocomplete="off">
+            <input id="bride_parents" class="input" placeholder="Γονείς νύφης" autocomplete="off">
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ΚΟΥΜΠΑΡΟΙ -->
+      <div class="row">
+        <div class="field">
+          <label>Κουμπάρος / Κουμπάρα</label>
+
+          <div class="row row-2">
+            <div class="field" style="margin:0;">
+              <label class="labelSmall">Τύπος</label>
+              <select id="koumbaroi_type" class="input">
+                <option value="koumbaros">Ο κουμπάρος</option>
+                <option value="koumbara">Η κουμπάρα</option>
+                <option value="koumbaroi">Οι κουμπάροι</option>
+              </select>
+            </div>
+
+            <div class="field" style="margin:0;">
+              <label class="labelSmall">Κουμπάρος/α 1</label>
+              <input id="koumbaros_1" class="input" placeholder="Ονοματεπώνυμο" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="row row-2" style="margin-top:10px;">
+            <div class="field" style="margin:0;">
+              <label class="labelSmall">Κουμπάρος/α 2 (προαιρετικό)</label>
+              <input id="koumbaros_2" class="input" placeholder="Ονοματεπώνυμο (προαιρετικό)" autocomplete="off">
+            </div>
+            <div class="field" style="margin:0;">
+              <label class="labelSmall">Κουμπάρος/α 3 (προαιρετικό)</label>
+              <input id="koumbaros_3" class="input" placeholder="Ονοματεπώνυμο (προαιρετικό)" autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ΚΕΙΜΕΝΟ -->
+      <div class="row">
+        <div class="field">
+          <label>Κείμενο (μετά τα ονόματα)</label>
+          <div class="miniHint">Διάλεξε ένα από τα έτοιμα ή γράψε το δικό σας.</div>
+
+          <select id="intro_choice" class="input" style="margin-top:10px;">
+            <option value="1">Save the Date! Θα είναι τιμή μας να μοιραστείτε μαζί μας αυτή τη μέρα.</option>
+            <option value="2">Με χαρά σας προσκαλούμε να γιορτάσετε μαζί μας την πιο όμορφη στιγμή της ζωής μας.</option>
+            <option value="3">Σας περιμένουμε να μοιραστούμε αγάπη, χαμόγελα και μια αξέχαστη βραδιά.</option>
+            <option value="custom">Κενό / Δικό σας κείμενο</option>
+          </select>
+
+          <textarea id="intro_custom" class="input" rows="3" placeholder="Γράψτε εδώ το δικό σας κείμενο…" style="margin-top:10px; display:none;"></textarea>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ΗΜΕΡΟΜΗΝΙΑ + ΩΡΑ -->
+      <div class="row row-2">
+        <div class="field">
+          <label>Ημερομηνία γάμου</label>
+          <input id="wedding_date" class="input" type="date" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Ώρα</label>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <input id="wedding_time_hh" class="input" type="text" inputmode="numeric" maxlength="2" placeholder="HH" autocomplete="off" style="width:90px; text-align:center;" />
+            <span style="font-weight:800;">:</span>
+            <input id="wedding_time_mm" class="input" type="text" inputmode="numeric" maxlength="2" placeholder="MM" autocomplete="off" style="width:90px; text-align:center;" />
+            <input id="wedding_time" type="hidden" value="" />
+          </div>
+          <div class="miniHint">π.χ. 19 : 30</div>
+        </div>
+      </div>
+
+      <!-- ΤΗΛΕΦΩΝΟ + EMAIL -->
+      <div class="row row-2" style="margin-top:10px;">
+        <div class="field">
+          <label>Τηλέφωνο</label>
+          <input id="phone" class="input" placeholder="69xxxxxxxx" inputmode="tel" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>Email (προαιρετικό)</label>
+          <input id="email" class="input" placeholder="example@email.com" inputmode="email" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ΜΥΣΤΗΡΙΟ + MAPS -->
+      <div class="row row-2">
+        <div class="field">
+          <label>Εκκλησία / Δημαρχείο / Χώρος μυστηρίου</label>
+          <input id="venue" class="input" placeholder="π.χ. Ι.Ν. Αγ. Γεωργίου – Ξάνθη" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label class="labelSmall">Google Maps link (Μυστήριο)</label>
+          <input id="venue_maps_url" class="input" placeholder="https://maps.app.goo.gl/..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- ΔΕΞΙΩΣΗ + MAPS -->
+      <div class="row row-2" style="margin-top:10px;">
+        <div class="field">
+          <label>Χώρος δεξίωσης</label>
+          <input id="reception_venue" class="input" placeholder="π.χ. Κτήμα … / Αίθουσα …" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label class="labelSmall">Google Maps link (Δεξίωση)</label>
+          <input id="reception_maps_url" class="input" placeholder="https://maps.app.goo.gl/..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- IBAN -->
+      <div class="row row-2">
+        <div class="field">
+          <label>IBAN (προαιρετικό)</label>
+          <input id="iban" class="input" placeholder="GRxx xxxx ..." autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>&nbsp;</label>
+          <div class="hint"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- COUNTDOWN -->
+      <div class="row">
+        <div class="field">
+          <div class="inlineToggleRow">
+            <label class="inlineToggleTitle">Αντίστροφη μέτρηση</label>
+
+            <div class="toggleline">
+              <label class="switch">
+                <input id="countdown_enabled" type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span id="countdown_label" class="toggle-status is-on">Ενεργό</span>
+            </div>
+          </div>
+
+          <div class="miniHint">Αν είναι ενεργό, θα εμφανίζεται αντίστροφη μέτρηση μέχρι την ημέρα του γάμου.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- RSVP -->
+<div class="inlineToggleLeft rsvpBlock">
+  <label class="inlineToggleTitle">RSVP</label>
+
+  <div class="toggleline">
+    <label class="switch">
+      <input id="rsvp_enabled" type="checkbox" checked>
+      <span class="slider"></span>
+    </label>
+    <span id="rsvp_label" class="toggle-status is-on">Ενεργό</span>
+  </div>
+
+  <div class="rsvpDeadlineRow">
+    <label for="rsvp_deadline">Ενεργό μέχρι:</label>
+    <input id="rsvp_deadline" class="input" type="date" autocomplete="off">
+  </div>
+</div>
+
+      <!-- NOTES -->
+      <div class="row" style="margin-top:10px;">
+        <div class="field">
+          <label>Σημειώσεις (προαιρετικό)</label>
+          <textarea id="notes" class="input" rows="3" placeholder="Οτιδήποτε θέλετε να γνωρίζω…"></textarea>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions actionsGrid notPaid">
+
+
+
+        <button id="btnSave" class="btn" type="button">
+          Αποθήκευση
+        </button>
+
+        <a id="btnPay" class="btn soft" target="_blank" rel="noopener"
+           href="https://mypos.com/@MonteCristoEvents/85">
+          Ολοκλήρωση πληρωμής
+        </a>
+
+        <a id="openInvitation" class="btn soft" target="_blank" rel="noopener">
+          Προβολή προσκλητηρίου
+        </a>
+
+        <a id="openRsvp" class="btn soft" target="_blank" rel="noopener">
+          Απαντήσεις καλεσμένων
+        </a>
+
+        <a id="btnSendInvitation" class="btn soft" href="#">
+          Προώθηση προσκλητηρίου
+        </a>
+
+        <a id="btnSendNoReception" class="btn soft" href="#">
+          Προώθηση (Χωρίς Δεξίωση)
+        </a>
+
+        <span id="status" class="status"></span>
+
+      </div>
+
+<div id="previewWrap" class="row" style="display:none; margin-top:18px;">
+  <div class="field" style="width:100%;">
+    <label>Προεπισκόπηση προσκλητηρίου</label>
+
+    <div style="max-width:420px; margin:10px auto 0; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,.15); border:1px solid rgba(0,0,0,.08); background:#fff;">
+      <iframe
+        id="invitationPreview"
+        style="width:100%; height:520px; border:0;"
+        loading="lazy"
+        referrerpolicy="no-referrer">
+      </iframe>
+    </div>
+  </div>
+</div>
+</section>
+<script>
+  const WORKER_BASE = "";
+  const qs = new URLSearchParams(location.search);
+  const t = (qs.get("t") || "").trim().toLowerCase();
+  const form_token = t;
+
+  // ✅ Έλεγχος token ΠΡΙΝ συνεχίσει το script
+  if (!form_token) {
+    alert("Missing token");
+    throw new Error("Missing token");
+  }
+
+  const el = (id) => document.getElementById(id);
+  const statusEl = el("status");
+  const btnSave = el("btnSave");
+  const btnPay = el("btnPay");
+  const openRsvp = el("openRsvp");
+  const openInvitation = el("openInvitation");
+  const btnSendInvitation = el("btnSendInvitation");
+  const btnSendInvitationNoReception = el("btnSendNoReception");
+  const actionsWrap = document.querySelector(".actionsGrid");
+  const previewWrap = el("previewWrap");
+  const invitationPreview = el("invitationPreview");
+
+  // ✅ ΠΑΝΤΑ ορισμένο (ώστε να μην σκάει ποτέ "not defined")
+  let partner_ref = "";
+
+  const fields = {
+    groom_first: el("groom_first"),
+    bride_first: el("bride_first"),
+    groom_parents: el("groom_parents"),
+    bride_parents: el("bride_parents"),
+    koumbaroi_type: el("koumbaroi_type"),
+    koumbaros_1: el("koumbaros_1"),
+    koumbaros_2: el("koumbaros_2"),
+    koumbaros_3: el("koumbaros_3"),
+    intro_choice: el("intro_choice"),
+    intro_custom: el("intro_custom"),
+    wedding_date: el("wedding_date"),
+    wedding_time: el("wedding_time"),
+    wedding_time_hh: el("wedding_time_hh"),
+    wedding_time_mm: el("wedding_time_mm"),
+    venue: el("venue"),
+    venue_maps_url: el("venue_maps_url"),
+    reception_venue: el("reception_venue"),
+    reception_maps_url: el("reception_maps_url"),
+    phone: el("phone"),
+    email: el("email"),
+    notes: el("notes"),
+    iban: el("iban"),
+    countdown_enabled: el("countdown_enabled"),
+    rsvp_deadline: el("rsvp_deadline"),
+    rsvp_enabled: el("rsvp_enabled"),
+  };
+
+  let invitationUrl = "";
+  let isReadOnly = false;
+  let isPaid = false;
+  let rsvpDeadlineTouched = false;
+
+  function setStatus(msg, ok=true){
+    statusEl.textContent = msg || "";
+    statusEl.className = "status " + (ok ? "" : "bad");
+  }
+
+  function applyPaidUI(){
+    if (!actionsWrap) return;
+
+    if (isReadOnly){
+      actionsWrap.classList.remove("paid","notPaid");
+      btnPay && (btnPay.style.display = "none");
+      openInvitation && (openInvitation.style.display = "none");
+      openRsvp && (openRsvp.style.display = "none");
+      btnSendInvitation && (btnSendInvitation.style.display = "none");
+      btnSendInvitationNoReception && (btnSendInvitationNoReception.style.display = "none");
+      return;
+    }
+
+    actionsWrap.classList.toggle("paid", !!isPaid);
+    actionsWrap.classList.toggle("notPaid", !isPaid);
+  }
+
+  async function api(path, opts={}){
+    const r = await fetch(WORKER_BASE + path, {
+      ...opts,
+      headers: { "content-type":"application/json", ...(opts.headers||{}) }
+    });
+    const data = await r.json().catch(()=> ({}));
+    if (!r.ok) throw new Error(data?.error || ("HTTP " + r.status));
+    return data;
+  }
+
+  function toISODateFromInput(v){ return (v || "").trim() || ""; }
+  function fromISOToDateInput(iso){
+    if(!iso) return "";
+    const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[1]}-${m[2]}-${m[3]}` : "";
+  }
+
+  function syncIntroUI(){
+    const isCustom = fields.intro_choice.value === "custom";
+    fields.intro_custom.style.display = isCustom ? "block" : "none";
+  }
+  fields.intro_choice.addEventListener("change", syncIntroUI);
+
+  function mailBodyInvitation(invUrl){
+    return `Save the date!
+
+Θα είναι τιμή μας να μοιραστείτε μαζί μας αυτή τη μέρα.
+
+${invUrl}
+`;
+  }
+
+  function makeMailto(to, subject, body){
+    const cleanBody = (body || "").replace(/\r?\n/g, "\r\n");
+    return "mailto:" + (to || "") +
+      "?subject=" + encodeURIComponent(subject || "") +
+      "&body=" + encodeURIComponent(cleanBody);
+  }
+
+  async function load(){
+    if (!t){
+      setStatus("Λείπει token στο URL (?t=...)", false);
+      btnSave.disabled = true;
+      return;
+    }
+
+    try{
+      const data = await api(`/api/form?t=${encodeURIComponent(t)}`);
+
+      isReadOnly = !!data.readOnly;
+      isPaid = !!data.paid;
+
+      const f = data.form || {};
+
+      // ✅ partner_ref: ΜΟΝΟ ΕΔΩ, ΜΙΑ ΦΟΡΑ
+      partner_ref = String(data.partner_ref || f.partner_ref || "").trim();
+
+      // ✅ update pay link: ΜΟΝΟ ΕΔΩ, ΜΙΑ ΦΟΡΑ
+      const payAmount = partner_ref ? "70" : "85";
+      if (btnPay) btnPay.href = `https://mypos.com/@MonteCristoEvents/${payAmount}`;
+
+      applyPaidUI();
+
+      // Prefill
+      fields.phone.value = (f.phone || "");
+      fields.email.value = (f.email || "");
+
+      try{
+const sib = await api(`/api/siblings?t=${encodeURIComponent(t)}`);
+
+const rawInvitationUrl = sib?.urls?.invitation || "";
+const rawRsvpUrl = sib?.urls?.rsvp || "";
+
+invitationUrl = rawInvitationUrl
+  ? new URL(rawInvitationUrl, location.origin).href
+  : "";
+
+if (openRsvp) {
+  openRsvp.href = rawRsvpUrl
+    ? new URL(rawRsvpUrl, location.origin).href
+    : "#";
+}
+
+if (openInvitation) {
+  openInvitation.href = invitationUrl || "#";
+}
+   
+   if (invitationUrl && previewWrap && invitationPreview) {
+  invitationPreview.src = invitationUrl + "&preview=1";
+  previewWrap.style.display = "block";
+}
+   
+      }catch(e){
+        console.warn("siblings failed", e);
+      }
+
+      if (isReadOnly){
+        btnSave.disabled = true;
+        setStatus("Read-only link", true);
+      } else {
+        btnSave.disabled = false;
+        setStatus("", true);
+      }
+
+      fields.groom_first.value = f.groom_first || "";
+      fields.bride_first.value = f.bride_first || "";
+
+      fields.groom_parents.value = f.groom_parents || "";
+      fields.bride_parents.value = f.bride_parents || "";
+
+      fields.koumbaroi_type.value = f.koumbaroi_type || "koumbaros";
+      fields.koumbaros_1.value = f.koumbaros_1 || "";
+      fields.koumbaros_2.value = f.koumbaros_2 || "";
+      fields.koumbaros_3.value = f.koumbaros_3 || "";
+
+      fields.intro_choice.value = f.intro_choice || "1";
+      fields.intro_custom.value = f.intro_custom || "";
+      syncIntroUI();
+
+      fields.wedding_date.value = fromISOToDateInput(f.wedding_date);
+
+if (!f.rsvp_deadline && fields.wedding_date.value) {
+  const d = new Date(fields.wedding_date.value + "T12:00:00");
+  d.setDate(d.getDate() - 14);
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+
+  fields.rsvp_deadline.value = `${yyyy}-${mm}-${dd}`;
+}
+
+      const tt = (f.wedding_time || "").trim();
+      fields.wedding_time.value = tt;
+      fields.wedding_time_hh.value = "";
+      fields.wedding_time_mm.value = "";
+      const m = tt.match(/^(\d{1,2}):(\d{1,2})$/);
+      if (m){
+        fields.wedding_time_hh.value = String(m[1]).padStart(2,"0");
+        fields.wedding_time_mm.value = String(m[2]).padStart(2,"0");
+        fields.wedding_time.value = fields.wedding_time_hh.value + ":" + fields.wedding_time_mm.value;
+      }
+
+      fields.venue.value = f.venue || "";
+      fields.venue_maps_url.value = f.venue_maps_url || "";
+      fields.reception_venue.value = f.reception_venue || "";
+      fields.reception_maps_url.value = f.reception_maps_url || "";
+
+      fields.notes.value = f.notes || "";
+      fields.iban.value = f.iban || "";
+
+      fields.countdown_enabled.checked = (Number(f.countdown_enabled ?? 1) === 1);
+      {
+        const lbl = el("countdown_label");
+        const on = fields.countdown_enabled.checked;
+        lbl.textContent = on ? "Ενεργό" : "Μη ενεργό";
+        lbl.classList.toggle("is-on", on);
+        lbl.classList.toggle("is-off", !on);
+      }
+
+      fields.rsvp_deadline.value = fromISOToDateInput(f.rsvp_deadline);
+      rsvpDeadlineTouched = !!f.rsvp_deadline;
+      fields.rsvp_enabled.checked = (Number(f.rsvp_enabled ?? 1) === 1);
+      {
+        const lbl = el("rsvp_label");
+        const on = fields.rsvp_enabled.checked;
+        lbl.textContent = on ? "Ενεργό" : "Μη ενεργό";
+        lbl.classList.toggle("is-on", on);
+        lbl.classList.toggle("is-off", !on);
+      }
+
+}catch(e){
+
+  document.querySelectorAll("#formCard input, #formCard textarea, #formCard select, #formCard button, #formCard a")
+    .forEach(x => x.style.display = "none");
+
+  setStatus(
+    (e.message === "Forbidden" || e.message === "HTTP 403")
+      ? "Η φόρμα δεν είναι διαθέσιμη από αυτό το link."
+      : (e.message || "Σφάλμα φόρτωσης"),
+    false
+  );
+
+  btnSave.disabled = true;
+}
+  }
+
+  function collect(){
+    return {
+      t,
+      groom_first: (fields.groom_first.value || "").trim(),
+      bride_first: (fields.bride_first.value || "").trim(),
+      groom_parents: (fields.groom_parents.value || "").trim(),
+      bride_parents: (fields.bride_parents.value || "").trim(),
+      koumbaroi_type: (fields.koumbaroi_type.value || "koumbaros"),
+      koumbaros_1: (fields.koumbaros_1.value || "").trim(),
+      koumbaros_2: (fields.koumbaros_2.value || "").trim(),
+      koumbaros_3: (fields.koumbaros_3.value || "").trim(),
+      intro_choice: (fields.intro_choice.value || "1"),
+      intro_custom: (fields.intro_custom.value || "").trim(),
+      wedding_date: toISODateFromInput(fields.wedding_date.value),
+      wedding_time: (fields.wedding_time.value || "").trim(),
+      venue: (fields.venue.value || "").trim(),
+      venue_maps_url: (fields.venue_maps_url.value || "").trim(),
+      reception_venue: (fields.reception_venue.value || "").trim(),
+      reception_maps_url: (fields.reception_maps_url.value || "").trim(),
+      phone: (fields.phone.value || "").trim(),
+      email: (fields.email.value || "").trim(),
+      notes: (fields.notes.value || "").trim(),
+      iban: (fields.iban.value || "").trim(),
+      countdown_enabled: fields.countdown_enabled.checked ? 1 : 0,
+      rsvp_deadline: toISODateFromInput(fields.rsvp_deadline.value),
+      rsvp_enabled: fields.rsvp_enabled.checked ? 1 : 0
+    };
+  }
+
+  btnSave.addEventListener("click", async () => {
+    try{
+      btnSave.disabled = true;
+      setStatus("Αποθήκευση…", true);
+      await api(`/api/form`, { method:"POST", body: JSON.stringify(collect()) });
+      setStatus("OK ✅", true);
+      await load();
+    }catch(e){
+      setStatus(e.message || "Σφάλμα αποθήκευσης", false);
+    }finally{
+      btnSave.disabled = false;
+    }
+  });
+
+fields.rsvp_enabled.addEventListener("change", () => {
+  const lbl = el("rsvp_label");
+  const on = fields.rsvp_enabled.checked;
+
+  lbl.textContent = on ? "Ενεργό" : "Μη ενεργό";
+  lbl.classList.toggle("is-on", on);
+  lbl.classList.toggle("is-off", !on);
+});
+
+fields.countdown_enabled.addEventListener("change", () => {
+  const lbl = el("countdown_label");
+  const on = fields.countdown_enabled.checked;
+
+  lbl.textContent = on ? "Ενεργό" : "Μη ενεργό";
+  lbl.classList.toggle("is-on", on);
+  lbl.classList.toggle("is-off", !on);
+});
+  
+  fields.rsvp_deadline.addEventListener("input", () => {
+  rsvpDeadlineTouched = true;
+});
+  
+  fields.wedding_date.addEventListener("input", () => {
+  if (rsvpDeadlineTouched) return;
+  if (!fields.wedding_date.value) return;
+
+  const d = new Date(fields.wedding_date.value + "T12:00:00");
+  d.setDate(d.getDate() - 14);
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+
+  fields.rsvp_deadline.value = `${yyyy}-${mm}-${dd}`;
+});
+  
+  btnSendInvitationNoReception?.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    if (!invitationUrl){
+      setStatus("Δεν βρέθηκε invitation link", false);
+      return;
+    }
+    if (isReadOnly){
+      setStatus("Read-only link.", false);
+      return;
+    }
+    if (!isPaid){
+      setStatus("Η αποστολή ενεργοποιείται μετά την εξόφληση.", false);
+      return;
+    }
+
+    const groom = (fields.groom_first.value || "").trim();
+    const bride = (fields.bride_first.value || "").trim();
+
+    let subject = "Save the Date!";
+    if (groom && bride) subject += " • " + groom + " & " + bride;
+
+    const urlNoReception = invitationUrl + "&nr=1";
+    location.href = makeMailto("", subject, mailBodyInvitation(urlNoReception));
+  });
+
+  btnSendInvitation?.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    if (!invitationUrl){
+      setStatus("Δεν βρέθηκε invitation link", false);
+      return;
+    }
+    if (isReadOnly){
+      setStatus("Read-only link.", false);
+      return;
+    }
+    if (!isPaid){
+      setStatus("Η αποστολή ενεργοποιείται μετά την εξόφληση.", false);
+      return;
+    }
+
+    const groom = (fields.groom_first.value || "").trim();
+    const bride = (fields.bride_first.value || "").trim();
+
+    let subject = "Save the Date!";
+    if (groom && bride) subject += " • " + groom + " & " + bride;
+
+    location.href = makeMailto("", subject, mailBodyInvitation(invitationUrl));
+  });
+
+  (function setupTimeFields(){
+    const hh = el("wedding_time_hh");
+    const mm = el("wedding_time_mm");
+    const out = el("wedding_time");
+    if (!hh || !mm || !out) return;
+
+    function only2Digits(x){
+      let v = (x.value || "").replace(/[^\d]/g, "");
+      if (v.length > 2) v = v.slice(0,2);
+      x.value = v;
+    }
+
+    function updateHidden(){
+      if (hh.value.length === 2){
+        let hNum = parseInt(hh.value, 10);
+        if (!Number.isFinite(hNum)) hNum = 0;
+        if (hNum > 23) hNum = 23;
+        hh.value = String(hNum).padStart(2,"0");
+      }
+
+      if (mm.value.length === 2){
+        let mNum = parseInt(mm.value, 10);
+        if (!Number.isFinite(mNum)) mNum = 0;
+        if (mNum > 59) mNum = 59;
+        mm.value = String(mNum).padStart(2,"0");
+      }
+
+      out.value = (hh.value.length === 2 && mm.value.length === 2) ? (hh.value + ":" + mm.value) : "";
+    }
+
+    hh.addEventListener("input", function(){
+      only2Digits(hh);
+      if (hh.value.length === 2){
+        mm.focus();
+        if (mm.select) mm.select();
+      }
+      updateHidden();
+    });
+
+    mm.addEventListener("input", function(){
+      only2Digits(mm);
+      updateHidden();
+    });
+
+    hh.addEventListener("blur", function(){
+      if (hh.value.length === 1) hh.value = "0" + hh.value;
+      updateHidden();
+    });
+
+    mm.addEventListener("blur", function(){
+      if (mm.value.length === 1) mm.value = "0" + mm.value;
+      updateHidden();
+    });
+
+    mm.addEventListener("keydown", function(e){
+      if (e.key === "Backspace" && (mm.value || "").length === 0){
+        hh.focus();
+      }
+    });
+
+    updateHidden();
+  })();
+
+  load();
+  syncIntroUI();
+</script>
+</body>
+</html>

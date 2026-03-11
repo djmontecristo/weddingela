@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>RSVP</title>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="manifest" href="/manifest-rsvp.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <meta name="theme-color" content="#c6a86b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="WeddingEla">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <style>
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 22px 16px 90px;
+    }
+
+    .top{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 14px;
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 240px;
+    }
+
+    .couple{
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .meta{
+      color: var(--d-muted);
+      font-size: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 14px;
+      align-items:center;
+    }
+
+    .note{
+      margin: 14px 0 18px;
+      padding: 14px 14px;
+      border-radius: var(--d-radius);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--d-muted);
+    }
+    
+    .note strong{ color: var(--d-text); }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--d-line);
+      flex-wrap:wrap;
+    }
+
+    .toolbar .left, .toolbar .right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--d-line);
+      background: rgba(255,255,255,0.06);
+    }
+    .toggle input{ width:18px; height:18px; }
+
+    .empty{
+      padding: 22px 12px;
+      color: var(--d-muted);
+      text-align:center;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.92);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      display:none;
+    }
+
+/* RSVP table: ΚΟΛΛΑΕΙ ΑΡΙΣΤΕΡΑ + compact columns */
+#table{
+  width: max-content !important;   /* να μη γίνεται 100% */
+  min-width: 0 !important;         /* να αγνοήσει το 680px */
+  display: inline-table;           /* shrink-to-fit μέσα στο overflow container */
+  table-layout: auto;
+}
+
+#table th,
+#table td{
+  text-align: left !important;
+  width: auto !important;          /* να μη μοιράζει ίσα */
+  white-space: nowrap;             /* οι στήλες να μένουν στενές */
+}
+
+/* 1η στήλη: ~15 χαρακτήρες και μετά wrap */
+#table th:first-child,
+#table td:first-child{
+  white-space: normal;
+  max-width: 15ch;
+}
+
+/* για να μην "κεντράρει" το inline-table κατά λάθος */
+#table{ margin-left: 0 !important; }
+
+@media (max-width: 740px){
+  .couple{ font-size: 22px; }
+}
+  </style>
+</head>
+<body class="pageRsvp" data-theme="ivory-gold">  <div class="wrap">
+<img class="kicker" src="/images/weddingela-logo.png" alt="WeddingEla">
+<div class="top">
+  <div class="title">
+    <div class="couple" id="couple">RSVP</div>
+        <div class="meta">
+          <span class="badge" id="eventDate">Ημερομηνία Event: —</span>
+          <span class="badge" id="deadline">Απάντηση μέχρι: —</span>
+          <span class="badge" id="count">Απαντήσεις: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Αυτό το link είναι αυστηρά προσωπικό (“For your eyes-only”).</strong><br>
+      Παρακαλούμε μην το προωθήσετε δημόσια.
+    </div>
+
+    <div class="card">
+      <div class="toolbar">
+<div class="left">
+  <div class="btn ghost" id="statsBox">
+    Απάντησαν θετικά: —<br>
+    Θα έρθουν σύνολο: —
+  </div>
+  <button class="btn" id="btnDownload">Download<br>(XLS-compatible CSV)</button>
+  <button class="btn" id="btnEmail">Αποστολή στο<br>email μου</button>
+  <button class="btn" id="btnFilterNotes">Με σχόλια</button>
+
+</div>
+
+        <div class="right">
+          <label class="toggle">
+            <input type="checkbox" id="toggleRSVP" />
+            <span id="toggleLabel">RSVP: —</span>
+          </label>
+        </div>
+      </div>
+
+      <div style="max-height: 62vh; overflow:auto;">
+        <table class="table" id="table">
+          <thead>
+            <tr>
+              <th>Όνομα</th>
+              <th>Παρουσία</th>
+              <th>Άτομα</th>
+              <th>Note</th>
+              <th>Ημερομηνία</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+
+        <div class="empty" id="empty" style="display:none;">No RSVPs yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const WORKER_BASE = "";
+  const API = WORKER_BASE + "/api";
+  const qs = new URLSearchParams(location.search);
+  const t = (qs.get("t") || "").trim().toLowerCase();
+
+  const elCouple = document.getElementById("couple");
+  const elEventDate = document.getElementById("eventDate");
+  const elDeadline = document.getElementById("deadline");
+  const elCount = document.getElementById("count");
+  const elTbody = document.getElementById("tbody");
+  const elEmpty = document.getElementById("empty");
+  const elBtnDownload = document.getElementById("btnDownload");
+  const elBtnEmail = document.getElementById("btnEmail");
+  const elToggle = document.getElementById("toggleRSVP");
+  const elToggleLabel = document.getElementById("toggleLabel");
+  const elToast = document.getElementById("toast");
+  const elStats = document.getElementById("statsBox");
+  const elBtnFilterNotes = document.getElementById("btnFilterNotes");
+  let showOnlyNotes = false;
+
+elBtnFilterNotes?.addEventListener("click", () => {
+  showOnlyNotes = !showOnlyNotes;
+
+  if (showOnlyNotes){
+    elBtnFilterNotes.classList.add("active");
+  } else {
+    elBtnFilterNotes.classList.remove("active");
+  }
+
+  load(); // ξαναφορτώνει τον πίνακα
+});
+
+  function toast(msg){
+    elToast.textContent = msg;
+    elToast.style.display = "block";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=> elToast.style.display = "none", 2200);
+  }
+
+  function fmtDate(yyyyMMdd){
+    if(!yyyyMMdd) return "—";
+    const m = String(yyyyMMdd).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if(!m) return yyyyMMdd;
+    return `${Number(m[3])}-${Number(m[2])}-${m[1]}`;
+  }
+
+  function fmtCreated(s){
+    if(!s) return "—";
+    const m = String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(!m) return s;
+    return `${Number(m[3])}-${Number(m[2])}-${m[1]}`;
+  }
+
+  function joinCouple(groom, bride){
+    const g = (groom||"").trim();
+    const b = (bride||"").trim();
+    if(g && b) return `${g} & ${b}`;
+    return g || b || "RSVP";
+  }
+
+  function buildTable(rows){
+    elTbody.innerHTML = "";
+
+    if(!Array.isArray(rows) || rows.length === 0){
+      elEmpty.style.display = "block";
+      document.getElementById("table").style.display = "none";
+      if (elCount) elCount.textContent = "Απαντήσεις: 0";
+      return;
+    }
+
+    document.getElementById("table").style.display = "table";
+    elEmpty.style.display = "none";
+    if (elCount) elCount.textContent = `Απαντήσεις: ${rows.length}`;
+    
+let yesCount = 0;
+let totalPeople = 0;
+let notesCount = 0;
+
+for (const r of rows){
+  const hasNote = !!(r.note || "").trim();
+  const yes = String(r.attending || "").toLowerCase() === "yes";
+  const n = Number(r.party_size ?? 1);
+
+  if (hasNote) notesCount++;
+
+  if (yes){
+    yesCount++;
+    totalPeople += Number.isFinite(n) ? n : 1;
+  }
+}
+
+const totalReplies = rows.length;
+const pct = totalReplies ? Math.round((yesCount / totalReplies) * 100) : 0;
+
+if (elStats) {
+  elStats.innerHTML =
+    `Απάντησαν θετικά: ${yesCount} (${pct}%)<br>` +
+    `Θα έρθουν σύνολο: ${totalPeople}<br>` +
+    `Σχόλια: ${notesCount}`;
+}
+
+    for(const r of rows){
+    if (showOnlyNotes && !(r.note || "").trim()) continue;
+    
+      const tr = document.createElement("tr");
+
+      const tdName = document.createElement("td");
+      tdName.textContent = r.name || "";
+      tr.appendChild(tdName);
+
+const tdAtt = document.createElement("td");
+const yes = String(r.attending || "").toLowerCase() === "yes";
+
+tdAtt.textContent = yes ? "Ναι" : "Όχι";
+tdAtt.className = yes ? "presence" : "presence no";
+
+tr.appendChild(tdAtt);
+
+      const tdParty = document.createElement("td");
+      tdParty.textContent = yes ? String(r.party_size ?? 1) : "0";
+      tr.appendChild(tdParty);
+
+      const tdNote = document.createElement("td");
+      tdNote.className = "muted";
+      tdNote.textContent = r.note || "";
+      tr.appendChild(tdNote);
+
+      const tdCreated = document.createElement("td");
+      tdCreated.className = "muted";
+      tdCreated.textContent = fmtCreated(r.created_at);
+      tr.appendChild(tdCreated);
+
+      elTbody.appendChild(tr);
+    }
+  }
+
+  function buildEmailBody(data, csvUrl){
+    const rows = Array.isArray(data?.rsvps) ? data.rsvps : [];
+
+    let yesCount = 0;
+    let noCount = 0;
+    let totalPeople = 0;
+
+    for (const r of rows){
+      const yes = String(r.attending || "").toLowerCase() === "yes";
+      const n = Number(r.party_size ?? 1);
+
+      if (yes){
+        yesCount += 1;
+        totalPeople += (Number.isFinite(n) ? n : 1);
+      } else {
+        noCount += 1;
+      }
+    }
+
+    return [
+      `RSVP – Σύνοψη`,
+      ``,
+      `• Απάντησαν Ναι: ${yesCount}`,
+      `• Απάντησαν Όχι: ${noCount}`,
+      `• Θα είναι σύνολο: ${totalPeople}`,
+      ``,
+      `• Download CSV link:`,
+      csvUrl
+    ].join("\n");
+  }
+
+  async function load(){
+    if(!t){
+      elEmpty.style.display = "block";
+      elEmpty.textContent = "Missing token in URL (?t=...)";
+      document.getElementById("table").style.display = "none";
+      toast("Missing token");
+      return;
+    }
+
+    elBtnDownload.disabled = true;
+    elBtnEmail.disabled = true;
+
+    const res = await fetch(`${API}/rsvp/list?t=${encodeURIComponent(t)}`);
+    const data = await res.json().catch(()=> ({}));
+
+if(!res.ok || !data.ok){
+  const msg = data?.error || `Error (${res.status})`;
+
+  elCouple.textContent = "RSVP";
+  elEventDate.textContent = "Ημερομηνία γάμου: —";
+  elDeadline.textContent = "Απάντηση μέχρι: —";
+  if (elCount) elCount.textContent = "Απαντήσεις: 0";
+
+  elToggle.checked = false;
+  elToggleLabel.textContent = "RSVP: —";
+
+  if (elStats) {
+    elStats.innerHTML = `Απάντησαν θετικά: —<br>Θα έρθουν σύνολο: —`;
+  }
+
+  elEmpty.style.display = "block";
+  elEmpty.textContent = "List error: " + msg;
+  document.getElementById("table").style.display = "none";
+  toast(msg);
+  return;
+}
+
+    const coupleText = joinCouple(data?.couple?.groom_name, data?.couple?.bride_name);
+    elCouple.textContent = coupleText;
+
+    elEventDate.textContent = `Ημερομηνία γάμου: ${fmtDate(data?.wedding_date)}`;
+	elDeadline.textContent = `Απάντηση μέχρι: ${fmtDate(data?.rsvp_deadline)}`;
+    const email = (data?.email || "").trim();
+
+    elToggle.checked = !!data?.rsvp_enabled;
+    elToggleLabel.textContent = `RSVP: ${data?.rsvp_enabled ? "Enabled" : "Disabled"}`;
+
+    buildTable(Array.isArray(data?.rsvps) ? data.rsvps : []);
+
+    elBtnDownload.disabled = false;
+    elBtnEmail.disabled = !email;
+
+    elBtnDownload.onclick = () => {
+      location.href = `${API}/rsvp/csv?t=${encodeURIComponent(t)}`;
+    };
+
+    elBtnEmail.onclick = () => {
+      if(!email){ toast("Δεν υπάρχει email στο Form"); return; }
+      const csvUrl = `${API}/rsvp/csv?t=${encodeURIComponent(t)}`;
+      const subject = encodeURIComponent(`RSVP – ${coupleText}`);
+      const body = encodeURIComponent(buildEmailBody(data, csvUrl));
+      location.href = `mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`;
+    };
+
+    elToggle.onchange = async () => {
+      const enabled = elToggle.checked ? 1 : 0;
+      elToggle.disabled = true;
+
+      const r = await fetch(`${API}/rsvp/toggle?t=${encodeURIComponent(t)}`, {
+        method:"POST",
+        headers: { "content-type":"application/json" },
+        body: JSON.stringify({ enabled })
+      });
+
+      const j = await r.json().catch(()=> ({}));
+      elToggle.disabled = false;
+
+      if(!r.ok || !j.ok){
+        elToggle.checked = !elToggle.checked;
+        toast(j?.error || `Error (${r.status})`);
+        return;
+      }
+
+      elToggleLabel.textContent = `RSVP: ${enabled ? "Enabled" : "Disabled"}`;
+      toast(enabled ? "RSVP enabled" : "RSVP disabled");
+    };
+  }
+
+  load().catch((e)=> {
+    console.error(e);
+    elEmpty.style.display = "block";
+    elEmpty.textContent = "Unexpected error: " + (e?.message || "unknown");
+    document.getElementById("table").style.display = "none";
+    toast("Unexpected error");
+  });
+})();
+</script>
+</body>
+</html>

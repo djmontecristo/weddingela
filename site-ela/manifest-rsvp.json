@@ -1,0 +1,17 @@
+{
+  "name": "WeddingEla RSVP",
+  "short_name": "RSVP",
+  "start_url": "/rsvp.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f1e8",
+  "theme_color": "#c6a86b",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

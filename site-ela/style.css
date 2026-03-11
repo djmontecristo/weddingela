@@ -1,0 +1,905 @@
+/* =========================================================
+   WeddingEla — Unified Digital UI
+   Single stylesheet for:
+   /admin.html
+   /form.html
+   /rsvp.html
+   (invitation.html has its own inline CSS)
+   ========================================================= */
+
+/* -------- Reset -------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; }
+img, svg, video, canvas { max-width: 100%; height: auto; display: block; }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid rgba(0,0,0,.55); outline-offset: 2px; border-radius: 10px; }
+
+/* -------- Core tokens (your luxury system) -------- */
+:root{
+  --bg: #fbf7f0;
+  --paper: #fffaf3;
+  --paper-2: #fff6ea;
+
+  --ink: #141312;
+  --muted: rgba(20,19,18,.70);
+  --muted-2: rgba(20,19,18,.50);
+
+  --gold: #b08a3b;
+  --gold-2: #d6bb74;
+  --line: rgba(176,138,59,.35);
+
+  --btn: #141312;
+  --btnText: #fff;
+  --btnSoft: rgba(20,19,18,.06);
+
+  --danger: #7a1f1f;
+
+  /* success / green accent (for RSVP) */
+  --success: rgba(120,170,120,.92);
+  --success-soft: rgba(120,170,120,.12);
+  --success-line: rgba(120,170,120,.45);
+
+  --shadow: 0 14px 40px rgba(0,0,0,.08);
+  --shadow-soft: 0 10px 24px rgba(0,0,0,.06);
+
+  --r-lg: 22px;
+  --r-md: 16px;
+  --r-sm: 12px;
+
+  --maxw: 980px;
+
+  --serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+}
+
+/* -------- Compatibility aliases (so old --d-* references won't break) -------- */
+:root{
+  --d-font: var(--sans);
+  --d-radius: var(--r-lg);
+  --d-radius2: var(--r-md);
+  --d-shadow: var(--shadow-soft);
+
+  --d-bg: var(--bg);
+  --d-panel: var(--paper);
+  --d-text: var(--ink);
+  --d-muted: var(--muted);
+  --d-line: rgba(0,0,0,.10);
+
+  --d-accent: var(--gold);
+  --d-accent-ink: #0f0f10;
+  --d-accent-soft: rgba(176,138,59,.18);
+
+  --d-input-bg: rgba(255,255,255,.65);
+  --d-input-bg-focus: rgba(255,255,255,.78);
+}
+
+/* -------- Themes (keep your data-theme API) -------- */
+/* Dark + Orange */
+body[data-theme="dark-orange"]{
+  --d-bg:#0a0a0a;
+  --d-panel:#111;
+  --d-text:#f5f5f5;
+  --d-muted: rgba(245,245,245,.75);
+  --d-line: rgba(255,255,255,.10);
+  --d-accent:#FF6E00;
+  --d-accent-ink:#000;
+  --d-accent-soft: rgba(255,110,0,.20);
+  --d-input-bg: rgba(255,255,255,.06);
+  --d-input-bg-focus: rgba(255,255,255,.085);
+}
+
+/* Ivory & Gold (default luxury light) */
+body[data-theme="ivory-gold"]{
+  --d-bg:#fbf7f0;
+  --d-panel:#fffaf3;
+  --d-text:#141312;
+  --d-muted: rgba(20,19,18,.70);
+  --d-line: rgba(0,0,0,.10);
+  --d-accent:#b08a3b;
+  --d-accent-ink:#0f0f10;
+  --d-accent-soft: rgba(176,138,59,.18);
+  --d-input-bg: rgba(0,0,0,.03);
+  --d-input-bg-focus: rgba(0,0,0,.05);
+}
+
+/* Champagne & Black (dark luxury) */
+body[data-theme="champagne-black"]{
+  --d-bg:#0f0f10;
+  --d-panel: rgba(255,255,255,.06);
+  --d-text: rgba(255,255,255,.92);
+  --d-muted: rgba(255,255,255,.68);
+  --d-line: rgba(255,255,255,.12);
+  --d-accent:#b79a58;
+  --d-accent-ink:#0f0f10;
+  --d-accent-soft: rgba(183,154,88,.22);
+  --d-input-bg: rgba(255,255,255,.06);
+  --d-input-bg-focus: rgba(255,255,255,.085);
+}
+
+/* Optional extra themes you already had */
+body[data-theme="sand-brown"]{
+  --bg: #f6efe6;
+  --paper: #fbf3e9;
+  --paper-2: #f7ecdf;
+  --ink: #1a1714;
+  --muted: rgba(26,23,20,.70);
+  --muted-2: rgba(26,23,20,.50);
+  --gold: #9a6a3b;
+  --gold-2: #caa98a;
+  --line: rgba(154,106,59,.32);
+}
+
+/* -------- Base page -------- */
+.pageAdmin, .pageForm, .pageDigital, .pageRsvp, .pagePartners{
+  background: var(--d-bg);
+  color: var(--d-text);
+  min-height: 100dvh;
+  font-family: var(--d-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+body{
+  line-height: 1.55;
+}
+
+/* -------- Layout -------- */
+.ctaBlock{
+  display:grid;
+  grid-template-columns: auto 1fr;
+  gap:10px 16px;
+  align-items:start;
+}
+
+.ctaBtn{
+  grid-row: span 3;
+  align-self:center;
+}
+
+.ctaText{
+  font-size:16px;
+  color:var(--d-muted);
+}
+
+.ctaText strong{
+  font-weight:600;
+  color:var(--d-text);
+}
+.shell{
+  width: min(var(--maxw), calc(100% - 40px));
+  margin: 0 auto;
+  padding: 22px 16px 90px;
+}
+
+/* -------- Topbar -------- */
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap: 14px;
+  flex-wrap:wrap;
+  margin-bottom: 14px;
+}
+
+.kicker{
+  display:block;
+  margin:0 auto 18px auto;
+  width:min(72vw,340px);
+  height:auto;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:6px;
+}
+
+.brand .title{
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: .2px;
+  font-size: clamp(22px, 3.2vw, 40px);
+  line-height: 1.08;
+  margin: 6px 0;
+}
+.brand .sub{
+  margin: 0;
+  color: var(--d-muted);
+  font-size: 15px;
+}
+.top-actions{ display:flex; gap:10px; align-items:center; }
+
+/* -------- Card / divider -------- */
+.card{
+  background: var(--d-panel);
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius);
+  box-shadow: var(--d-shadow);
+  padding: 18px;
+}
+@media (min-width: 760px){ .card{ padding: 22px; } }
+
+.divider{
+  height: 1px;
+  background: var(--d-line);
+  margin: 18px 0;
+}
+
+/* =========================================================
+   ✅ ROW SYSTEM (NO OVERLAP)
+   Works for:
+   - .row (flex wrapper blocks)
+   - .row row-2 (grid, when both classes exist)
+   - .row-2 alone (grid, used in older markup)
+   ========================================================= */
+
+/* default rows = flex */
+.row{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  width:100%;
+  min-width:0;
+}
+
+/* 2-column rows = grid (wins even when class="row row-2") */
+.row.row-2,
+.row-2{
+  display:grid !important;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap:12px;
+  align-items:start;
+  width:100%;
+  min-width:0;
+}
+
+/* critical shrink */
+.row.row-2 > *,
+.row-2 > *{
+  min-width: 0;
+}
+
+/* field wrapper */
+.field{
+  display:grid;
+  gap:8px;
+  width:100%;
+  min-width:0;
+  margin-bottom:12px;
+}
+
+/* labels */
+label{
+  font-size: 12px;
+  letter-spacing:.12em;
+  color: var(--d-muted);
+}
+
+/* -------- Inputs -------- */
+.input,
+textarea,
+select{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+
+  padding: 12px 12px;
+  border-radius: var(--d-radius2);
+  border: 1px solid var(--d-line);
+  background: var(--d-input-bg);
+  color: var(--d-text);
+  font-size: 16px;
+  outline: none;
+}
+textarea{ resize: vertical; }
+
+.input::placeholder,
+textarea::placeholder{
+  color: rgba(255,255,255,.45);
+}
+body[data-theme="ivory-gold"] .input::placeholder,
+body[data-theme="ivory-gold"] textarea::placeholder{
+  color: rgba(0,0,0,.45);
+}
+
+.input:focus,
+textarea:focus,
+select:focus{
+  background: var(--d-input-bg-focus);
+  border-color: color-mix(in oklab, var(--d-accent) 55%, var(--d-line));
+  box-shadow: 0 0 0 3px var(--d-accent-soft);
+}
+
+/* Extra safety: when inputs are direct children of grid */
+.row.row-2 > .input,
+.row.row-2 > select,
+.row.row-2 > textarea,
+.row-2 > .input,
+.row-2 > select,
+.row-2 > textarea{
+  width: auto;
+  max-width: 100%;
+}
+
+/* -------- Buttons -------- */
+.btn{
+  appearance: none;
+  border: 1px solid var(--d-line);
+  background: rgba(255,255,255,.06);
+  color: var(--d-text);
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+
+  user-select: none;
+  touch-action: manipulation;
+  transition: transform .06s ease, background .12s ease, border-color .12s ease, opacity .12s ease;
+}
+.btn:hover{ background: rgba(255,255,255,.10); }
+.btn:active{ transform: scale(0.99); }
+.btn[disabled]{ opacity:.45; cursor:not-allowed; }
+
+.btn.primary{
+  background: var(--d-accent);
+  color: var(--d-accent-ink);
+  border-color: transparent;
+}
+.btn.soft{ background: rgba(255,255,255,.08); }
+.btn.ghost{ background: transparent; }
+
+/* danger available */
+.btn.danger{
+  border-color: rgba(255,90,90,.35);
+  color: rgba(255,120,120,.95);
+}
+
+/* Admin: neutralize delete vibe if it carries danger */
+.pageAdmin .btn.danger{
+  color: var(--d-text);
+  border-color: var(--d-line);
+}
+
+/* -------- Status / hint -------- */
+.hint, .status{
+  color: var(--d-muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.hint.bad, .status.bad{
+  color: rgba(255,120,120,.95);
+}
+
+/* toggle status (Countdown / RSVP) */
+
+.pageForm .toggle-status{
+  font-size:13px;
+  color:var(--d-muted);
+  font-weight:400;
+}
+
+.pageForm .toggle-status.is-on{
+  color:var(--success);
+  font-weight:700;
+}
+
+.pageForm .toggle-status.is-off{
+  color:var(--d-muted);
+  font-weight:400;
+}
+
+.pageForm .inlineToggleRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+.pageForm .inlineToggleGrid{
+  display:grid;
+  grid-template-columns: 1fr minmax(220px, 320px);
+  gap:16px;
+  align-items:end;
+}
+
+.pageForm .inlineToggleLeft{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items:center;
+  gap:8px 16px;
+  min-height:46px;
+}
+
+.pageForm .inlineToggleTitle{
+  grid-column:1;
+  grid-row:1;
+}
+
+.pageForm .toggleline{
+  grid-column:2;
+  grid-row:1;
+  justify-self:end;
+}
+
+.pageForm .inlineToggleLeft .rsvpDeadlineRow{
+  grid-column:1 / span 2;
+  grid-row:2;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.pageForm .inlineToggleRight{
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-start;
+}
+
+.pageForm .inlineToggleRight label,
+.pageForm .inlineToggleTitle{
+  display:block;
+  margin-bottom:8px;
+  font-size:12px;
+  letter-spacing:.12em;
+  color:var(--d-muted);
+  font-weight:400;
+}
+
+.pageForm .toggleline{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.pageForm .rsvpBlock{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap:8px 16px;
+  align-items:center;
+}
+
+.pageForm .rsvpBlock .inlineToggleTitle{
+  grid-column:1;
+  grid-row:1;
+  margin-bottom:0;
+}
+
+.pageForm .rsvpBlock .toggleline{
+  grid-column:2;
+  grid-row:1;
+  justify-self:end;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.pageForm .rsvpBlock .rsvpDeadlineRow{
+  grid-column:1 / span 2;
+  grid-row:2;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.pageForm .rsvpBlock .rsvpDeadlineRow label{
+  margin-bottom:0;
+  white-space:nowrap;
+}
+
+/* -------- Pills (rsvp list yes/no) -------- */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  border: 1px solid var(--d-line);
+  background: rgba(255,255,255,.06);
+  white-space: nowrap;
+  font-weight: 800;
+}
+.pill.yes{
+  color: rgba(60,120,60,.92);
+  border-color: rgba(120,170,120,.35);
+  background: rgba(120,170,120,.10);
+}
+.pill.no{
+  color: rgba(255,120,120,.95);
+  border-color: rgba(255,90,90,.25);
+  background: rgba(255,90,90,.08);
+}
+
+/* -------- Tables (admin / rsvp list) -------- */
+.tbl, .table{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 680px;
+}
+/* =========================
+   RSVP table (compact + plain presence text)
+   ========================= */
+.pageRsvp .table{
+  table-layout: auto;
+  min-width: 0; /* επιτρέπει να “σφίξει” η table αν θες */
+}
+
+/* default: οι στήλες να μην “απλώνονται” άσκοπα */
+.pageRsvp .table th,
+.pageRsvp .table td{
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* 1η στήλη (Όνομα): ~15 chars και μετά wrap */
+.pageRsvp .table th:nth-child(1),
+.pageRsvp .table td:nth-child(1){
+  white-space: normal;
+  width: auto;
+  max-width: 15ch;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.pageRsvp .table th:nth-child(4),
+.pageRsvp .table td:nth-child(4){
+  white-space: normal;
+  width: auto;
+  min-width: 16ch;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Παρουσία: απλό κείμενο (όχι pill) */
+.pageRsvp .table td.presence{
+  font-weight: 700;
+  color: var(--ink); /* Ναι: μαύρο */
+}
+.pageRsvp .table td.presence.no{
+  color: var(--d-muted);
+  font-weight: 500;
+}
+.tbl th, .tbl td,
+.table th, .table td{
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--d-line);
+  text-align: left;
+  vertical-align: top;
+}
+.tbl th, .table th{
+  color: var(--d-muted);
+  font-size: 12px;
+  letter-spacing:.10em;
+  background: color-mix(in oklab, var(--d-panel) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.tbl tr:last-child td,
+.table tr:last-child td{ border-bottom: none; }
+
+.statBox{
+  padding: 8px 14px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,.6);
+  font-size: 14px;
+}
+
+.pageRsvp .table td:nth-child(4){
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pageRsvp .table td:nth-child(4):hover{ overflow: visible; }
+
+/* -------- Links -------- */
+.pageAdmin a, .pageForm a, .pageDigital a, .pageRsvp a{
+  color: var(--d-accent);
+}
+
+/* =========================================================
+   FORM — RSVP green (input + switch)
+   (keeps your exact behavior)
+   ========================================================= */
+.pageForm .switch input:checked + .slider{
+  background: rgba(120,170,120,.25);
+  border-color: rgba(120,170,120,.45);
+}
+.pageForm .switch input:checked + .slider::after{ background:#fff; }
+.btn.active{
+  background: var(--d-accent);
+  color: #fff;
+}
+
+/* -------- Print -------- */
+@media print{
+  body{ background:#fff; }
+  .card{ box-shadow:none; }
+}
+
+/* Admin header layout */
+
+.brandTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+}
+
+.brandLink{
+  font-weight:700;
+  text-decoration:none;
+  color:inherit;
+  font-size:1.1rem;
+}
+
+.brandLink:hover{
+  opacity:.7;
+}
+
+.logoutLink{
+  border:none;
+  background:none;
+  padding:0;
+  font-size:.9rem;
+  opacity:.7;
+  cursor:pointer;
+}
+
+.logoutLink:hover{
+  opacity:1;
+}
+
+.priceLine{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:baseline;
+}
+
+.priceLine span{
+  white-space:nowrap;
+}
+
+@media (max-width: 720px){
+
+  /* rows become single column */
+  .row.row-2,
+  .row-2{
+    grid-template-columns: 1fr;
+  }
+
+  /* price line responsive */
+  .priceSep{
+    display:none;
+  }
+
+  .priceText{
+    flex-basis:100%;
+  }
+
+  /* form toggle layout */
+  .pageForm .inlineToggleGrid{
+    grid-template-columns:1fr;
+  }
+
+  .pageForm .inlineToggleLeft{
+    min-height:auto;
+  }
+
+}
+/* =========================================================
+   Partners - ΣΥΝΕΡΓΑΤΕΣ
+   ========================================================= */
+
+.pagePartners .title{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "logo"
+    "pageTitle";
+  justify-items:center;
+  align-items:center;
+  gap:8px;
+  min-width:240px;
+}
+
+.pagePartners .title .adminLink{
+  position:absolute;
+  top:0;
+  right:0;
+  font-size:13px;
+  text-decoration:none;
+  color:#888;
+  white-space:nowrap;
+}
+
+.pagePartners .title .adminLink:hover{
+  color:#000;
+}
+.pagePartners .title .pageTitle{
+  grid-area:pageTitle;
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:.2px;
+  line-height:1.1;
+  margin:0;
+  text-align:center;
+}
+
+.pagePartners .top{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.pagePartners .sub{
+  color:var(--d-muted);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.pagePartners .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+.pagePartners .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+    }
+
+.pagePartners .stack{
+      display:grid;
+      gap:16px;
+    }
+
+    .pagePartners .sectionTitle{
+      font-size:18px;
+      font-weight:800;
+      margin:0 0 12px;
+    }
+
+    .muted{
+      color:var(--d-muted);
+    }
+
+    .loginBox{
+      max-width:460px;
+      margin:40px auto 0;
+    }
+
+    .field label{
+      font-size:14px;
+      font-weight:700;
+    }
+
+.pagePartners .field input{
+  min-height:46px;
+  border-radius:12px;
+  background:#fff;
+}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:12px;
+    }
+
+    .stat{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+
+    .statLabel{
+      font-size:13px;
+      color:var(--d-muted);
+      margin-bottom:6px;
+    }
+
+    .statValue{
+      font-size:28px;
+      font-weight:800;
+      line-height:1;
+    }
+
+    .refBox{
+      display:grid;
+      gap:10px;
+    }
+
+    .refLink{
+      word-break:break-all;
+      padding:12px 14px;
+      border-radius:12px;
+      background:#fff;
+      border:1px solid rgba(0,0,0,.08);
+      font-size:14px;
+      cursor:pointer;
+  	  user-select:all;
+    }
+
+    .paymentsList,
+    .leadsList{
+      display:grid;
+      gap:10px;
+    }
+
+    .item{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:14px;
+      padding:12px;
+      background:#fff;
+    }
+
+    .itemTitle{
+      font-weight:700;
+    }
+
+    .pagePartners .hidden{
+      display:none !important;
+    }
+
+    @media (max-width: 820px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 640px){
+      .stats{
+        grid-template-columns:1fr;
+      }
+
+	   .pagePartners .pageTitle{
+
+        font-size:24px;
+      }
+    }
+
+.qrWrap{
+  margin-top:16px;
+  display:flex;
+  justify-content:center;
+}
+
+.qrWrap img{
+  width:200px;
+  height:200px;
+  border-radius:8px;
+  background:#fff;
+  padding:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+

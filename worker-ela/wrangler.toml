@@ -1,0 +1,23 @@
+name = "worker-ela"
+main = "src/index.js"
+compatibility_flags = ["nodejs_compat"]
+compatibility_date = "2026-03-03"
+preview_urls = false
+[observability]
+enabled = true
+
+[[routes]]
+pattern = "weddingela.gr/api/*"
+zone_name = "weddingela.gr"
+
+[[routes]]
+pattern = "weddingela.gr/ref/*"
+zone_name = "weddingela.gr"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "weddingela_db"
+database_id = "bae1dfb0-e27c-4e43-ae9f-18bd4bc597c3"
+[vars]
+VAPID_PUBLIC_KEY = "BOCJtoX3Cddmn_HGCDzGkVQenylicDxklm3rMjBiFd8Zu8Q1R_95LXKxR52H1fk_4SuIxO8DvH7LZVK9L8gM56g"
+VAPID_CONTACT = "https://weddingela.gr"

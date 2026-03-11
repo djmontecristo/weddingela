@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>WeddingEla • Ψηφιακό προσκλητήριο</title>
+<meta property="og:title" content="WeddingEla – Το δικό σας ψηφιακό προσκλητήριο">
+<meta property="og:description" content="Δημιουργήστε το δικό σας ψηφιακό προσκλητήριο γάμου. Πρόσκληση, τοποθεσίες, RSVP και οργάνωση καλεσμένων σε ένα μόνο link.">
+<meta property="og:image" content="https://weddingela.gr/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://weddingela.gr">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WeddingEla">
+<meta property="og:locale" content="el_GR">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WeddingEla – Το δικό σας ψηφιακό προσκλητήριο">
+<meta name="twitter:description" content="Δημιουργήστε το δικό σας ψηφιακό προσκλητήριο γάμου εύκολα και γρήγορα.">
+<meta name="twitter:image" content="https://weddingela.gr/share.png">
+  <!-- ✅ ίδιο unified style με admin/form/rsvp -->
+  <link rel="stylesheet" href="/style.css">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#c6a86b">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    /* μικρές ειδικές πινελιές για landing (χωρίς να χαλάμε το unified css) */
+.brand{ text-align:left; }             /* ⬅️ default για τα κείμενα */
+
+.brand .kicker{
+  display:block;
+  margin:0 auto 18px auto;
+  width:min(90vw,480px);
+  height:auto;
+}
+
+.brand .sub{                           /* ✅ μόνο αυτό το κείμενο κέντρο */
+  text-align:left;
+  margin:0 auto;
+  max-width:520px;
+}
+.hero{
+  display:grid;
+  gap:14px;
+  padding:22px;
+  justify-items:center;
+  text-align:left;
+}
+.hero .headline{
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: .2px;
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.15;
+  margin: 4px 0 4px;
+}
+.hero .lead{
+  margin: 0;
+  color: var(--d-muted);
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 60ch;
+}
+    .features{
+      display:grid;
+      gap:10px;
+      margin-top: 10px;
+    }
+.feat{
+  padding: 12px 14px;
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius2);
+  background: color-mix(in oklab, var(--d-panel) 92%, transparent);
+  box-shadow: var(--d-shadow);
+  width:100%;
+  box-sizing:border-box;
+}
+    
+    .feat b{ display:block; margin-bottom:4px; }
+.feat > span{
+  display:block;
+  color: var(--d-muted);
+  font-size: 14px;
+}
+
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 6px;
+    }
+
+    .mini{
+      font-size: 13px;
+      color: var(--d-muted);
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    .formCard .title2{
+      margin: 0 0 8px;
+      font-family: var(--serif);
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+
+.title{
+  font-size: clamp(32px, 4vw, 52px);
+  margin-bottom:6px;
+}
+
+.sub{
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--d-text);
+  opacity: .85;
+  letter-spacing:.3px;
+}
+
+.btn.primary{ font-weight: 900; }
+
+.modal{ position:fixed; inset:0; display:none; z-index:9999; }
+.modal.open{ display:block; }
+.modal__backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.45); }
+.modal__panel{
+  position:relative;
+  max-width:520px;
+  margin: 12vh auto;
+  background: var(--d-panel);
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius2);
+  box-shadow: var(--d-shadow);
+  padding: 16px 16px 14px;
+}
+.modal__title{ margin:0 0 8px; font-family:var(--serif); }
+.modal__text{ margin:0 0 12px; color:var(--d-muted); line-height:1.5; }
+.modal__actions{ display:flex; gap:10px; justify-content:flex-end; }
+
+  </style>
+</head>
+<body class="pageDigital pageHome" data-theme="ivory-gold">
+<img class="kicker" src="/images/weddingela-logo.png" alt="WeddingEla">
+
+  <main class="shell">
+  
+<header class="topbar">
+<p class="sub" style="text-align:center;margin:0 auto;max-width:520px;">
+  Το ψηφιακό σπίτι του γάμου σας.
+</p>
+
+</header>
+
+    <section class="card hero">
+      <h2 id="adminLink" class="headline">Το προσκλητήριο του γάμου σας, σε ένα μόνο link</h2>
+      <p class="lead">
+<b style="display:block;margin-bottom:8px;">
+  Πρόσκληση • Οδηγίες • RSVP (Ενημέρωση παρουσίας)
+</b>
+        Κομψό, γρήγορο και mobile-first.<br>
+        Οι καλεσμένοι έχουν όσα χρειάζονται και απαντούν εύκολα.<br>
+        Εσύ βλέπεις συγκεντρωμένες απαντήσεις και στατιστικά.
+      </p>
+
+      <div class="features">
+<div class="feat">
+  <div style="max-width:420px;margin:0 auto;border-radius:14px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.15);">
+    <iframe
+      src="https://weddingela.gr/invitation?t=kvs4593csf"
+      style="width:100%;height:520px;border:0;"
+      loading="lazy">
+    </iframe>
+  </div>
+
+  <div style="text-align:center;margin-top:10px;">
+    <a href="https://weddingela.gr/invitation?t=kvs4593csf">
+      Δείτε το προσκλητήριο σε πλήρη οθόνη
+    </a>
+  </div>
+</div>
+        <div class="feat">
+<b class="priceLine">
+  Αξία <span id="priceA"></span>
+  <span class="priceSep">•</span>
+  <span class="priceText">Εύκολα και γρήγορα</span>
+</b>
+<span>Ξεκινάτε άμεσα συμπληρώνοντας τα βασικά του γάμου σας.</span>
+<span>Οι καλεσμένοι ανοίγουν την πρόσκληση και δηλώνουν παρουσία με ένα κλικ.</span>
+        </div>
+        <div class="feat">
+          <b>Invitation page</b>
+          <span>Τοποθεσίες + πλοήγηση, ώρα/ημερομηνία, IBAN προαιρετικά.</span>
+        </div>
+        <div class="feat">
+          <b>Ενημέρωση παρουσίας με ένα κλικ</b>
+          <span>Ονοματεπώνυμο, παρουσία, άτομα, τυχόν αλλεργίες, διατροφικές προτιμήσεις.</span>
+        </div>
+        <div class="feat">
+          <b>Αποτελέσματα για εσάς</b>
+          <span>Λίστα παρουσιών, και αποστολή σύνοψης στο email σας.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Αίτημα ενδιαφέροντος -->
+<section class="card formCard" id="interest">
+  <h3 class="title2">Ζητήστε το δικό σας</h3>
+  <p class="hint">Συμπληρώστε τα παρακάτω και πατήστε “Ενδιαφέρομαι”.</p>
+
+  <div class="row row-2">
+    <div class="field">
+      <label for="cPhone">Κινητό</label>
+		<input class="input" id="cPhone" type="tel" inputmode="tel" placeholder="69…" pattern="[0-9+() -]{6,}">
+    </div>
+
+<div class="field">
+  <label for="cEmail">Email (προαιρετικό)</label>
+  <input class="input" id="cEmail" type="email">
+</div>
+
+    <div class="field">
+      <label for="cDate">Ημερομηνία γάμου (προαιρετική)</label>
+      <input class="input" id="cDate" type="date" autocomplete="off">
+    </div>
+  </div>
+
+<div class="cf-turnstile"
+     data-sitekey="0x4AAAAAAClyNlh1OUUpKesR"
+     data-callback="onTS"></div>
+
+  <div class="row" style="margin-top:12px;">
+    <button class="btn primary" id="btnLead" type="button">Ενδιαφέρομαι</button>
+    <button class="btn ghost" id="btnClear" type="button">Καθαρισμός</button>
+  </div>
+
+  <div class="hint" id="leadStatus" style="margin-top:10px;"></div>
+</section>
+  </main>
+  
+<!-- Lead confirm modal -->
+<div class="modal" id="leadModal" aria-hidden="true">
+  <div class="modal__backdrop" data-close></div>
+  <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="leadModalTitle">
+    <h3 class="modal__title" id="leadModalTitle">Επιβεβαίωση</h3>
+    <p class="modal__text" id="leadModalText"></p>
+
+    <div class="modal__actions">
+      <button class="btn ghost" type="button" id="leadModalCancel">Ακύρωση</button>
+      <button class="btn primary" type="button" id="leadModalOk">Αποστολή</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const price_a = 85;
+  const price_b = 70;
+  const price_c = 0;
+  
+  const $ = (id) => document.getElementById(id);
+
+let partnerRef = "";
+
+const path = location.pathname.split("/");
+
+if (path[1] === "ref" && path[2]) {
+
+  const code = path[2].trim().toUpperCase();
+
+  // επιτρέπουμε μόνο 6 χαρακτήρες από το alphabet
+  if (/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{6}$/.test(code)) {
+
+    partnerRef = code;
+
+    const expire = Date.now() + (7 * 24 * 60 * 60 * 1000); // 7 ημέρες
+
+    localStorage.setItem("we_partner", JSON.stringify({
+      ref: partnerRef,
+      exp: expire
+    }));
+
+    history.replaceState({}, "", "/");
+
+  }
+
+}
+
+  const saved = localStorage.getItem("we_partner");
+
+  if (saved) {
+    try {
+      const obj = JSON.parse(saved);
+
+      if (obj.exp > Date.now()) {
+        partnerRef = obj.ref;
+      } else {
+        localStorage.removeItem("we_partner");
+      }
+
+    } catch {
+      localStorage.removeItem("we_partner");
+    }
+  }
+const priceEl = $("priceA");
+
+if (priceEl) {
+  if (partnerRef) {
+    priceEl.innerHTML =
+  `<span style="opacity:.5;text-decoration:line-through">${price_a}€</span> <span style="white-space:nowrap;">→ ${price_b}€ <span style="font-size:.85em;color:inherit;opacity:1;">(λόγω σύστασης)</span></span>`;} else {
+    priceEl.textContent = `${price_a}€`;
+  }
+}
+
+  const elPhone = $("cPhone");
+  const elEmail = $("cEmail");
+  const elDate  = $("cDate");
+  const btnLead = $("btnLead");
+  const leadStatus = $("leadStatus");
+
+  function val(el){ return (el?.value || "").trim(); }
+  
+  function digitsOnly(s){
+  return String(s || "").replace(/\D+/g, "");
+}
+
+function isValidGreekMobile(phone){
+  const d = digitsOnly(phone);
+  return d.length >= 10;
+}
+
+function isValidEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email || "").trim());
+}
+
+function validateLeadForm(){
+  const phone = val(elPhone);
+  const email = val(elEmail);
+
+  if (!phone) {
+    return "Συμπληρώστε το κινητό.";
+  }
+
+  if (!isValidGreekMobile(phone)) {
+    return "Το κινητό πρέπει να έχει τουλάχιστον 10 αριθμούς.";
+  }
+
+  if (email && !isValidEmail(email)) {
+    return "Συμπληρώστε σωστό email, π.χ. name@example.com.";
+  }
+
+  return "";
+}
+
+
+let tsToken = "";
+window.onTS = (token) => { tsToken = token || ""; };
+
+  async function createLead(){
+    const phone = digitsOnly(val(elPhone));
+    const email = val(elEmail);
+	const date  = val(elDate);
+
+const formError = validateLeadForm();
+if (formError) {
+  leadStatus.textContent = formError;
+  leadStatus.className = "hint bad";
+  return;
+}
+
+    btnLead.disabled = true;
+    leadStatus.textContent = "Καταχώρηση...";
+    leadStatus.className = "hint";
+
+    try{
+      const res = await fetch("/api/leads/create", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+body: JSON.stringify({
+phone: phone,
+email: email,
+wedding_date: date,
+  ref: partnerRef || null,
+  turnstile_token: tsToken
+})
+      });
+
+      const data = await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(data?.error || "Σφάλμα");
+
+      leadStatus.textContent = "Το αίτημα καταχωρήθηκε επιτυχώς ✅";
+      leadStatus.className = "hint";
+
+      elPhone.value = "";
+	  elEmail.value = "";
+      elDate.value  = "";
+      
+      tsToken = "";
+if (window.turnstile) {
+  window.turnstile.reset();
+}
+
+    }catch(e){
+      leadStatus.textContent = e.message || "Αποτυχία.";
+      leadStatus.className = "hint bad";
+    }finally{
+      btnLead.disabled = false;
+    }
+  }
+
+  // Modal refs
+const leadModal = $("leadModal");
+const leadModalText = $("leadModalText");
+const leadModalOk = $("leadModalOk");
+const leadModalCancel = $("leadModalCancel");
+
+function openModal(text){
+  leadModalText.textContent = text;
+  leadModal.classList.add("open");
+  leadModal.setAttribute("aria-hidden", "false");
+}
+function closeModal(){
+  leadModal.classList.remove("open");
+  leadModal.setAttribute("aria-hidden", "true");
+}
+leadModal.addEventListener("click", (e) => {
+  if (e.target && (e.target.hasAttribute("data-close"))) closeModal();
+});
+leadModalCancel.addEventListener("click", closeModal);
+
+// click -> show confirm
+btnLead.addEventListener("click", () => {
+  const phone = val(elPhone);
+  const email = val(elEmail);
+  const date  = val(elDate);
+
+const formError = validateLeadForm();
+if (formError) {
+  leadStatus.textContent = formError;
+  leadStatus.className = "hint bad";
+  return;
+}
+
+let lines = [];
+lines.push(`Κινητό: ${phone}`);
+
+if(email){
+  lines.push(`Email: ${email}`);
+}
+
+if(date){
+  lines.push(`Ημερομηνία γάμου: ${date}`);
+}
+
+const msg = lines.join("\n");
+
+openModal(msg);
+});
+
+leadModalOk.addEventListener("click", async () => {
+  closeModal();
+  await createLead();
+});
+  $("btnClear").addEventListener("click", () => {
+    elPhone.value = "";
+  elEmail.value = "";
+    elDate.value  = "";
+    leadStatus.textContent = "";
+  });
+})();
+
+// Admin shortcut if logged in
+const adminLink = document.getElementById("adminLink");
+const session = localStorage.getItem("ADMIN_SESSION");
+
+if (adminLink && session) {
+  adminLink.style.cursor = "pointer";
+  adminLink.addEventListener("click", () => {
+    location.href = "/admin.html";
+  });
+}
+</script>
+
+</body>
+</html>

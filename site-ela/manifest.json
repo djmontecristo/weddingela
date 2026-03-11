@@ -1,0 +1,17 @@
+{
+  "name": "WeddingEla",
+  "short_name": "WeddingEla",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f1e8",
+  "theme_color": "#c6a86b",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

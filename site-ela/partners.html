@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+
+  <title>WeddingEla Partners</title>
+
+  <link rel="stylesheet" href="/style.css">
+
+  <link rel="manifest" href="/manifest-partners.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <meta name="theme-color" content="#b79a58">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="WeddingEla">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+  
+<body class="pagePartners" data-theme="ivory-gold">
+<img class="kicker" src="/images/weddingela-logo.png">
+  <div class="wrap">
+
+<div class="top">
+  <div class="title">
+    <div class="pageTitle hidden" id="adminPageTitle">Συνεργάτες</div>
+  </div>
+
+</div>
+
+    <section class="loginBox card" id="loginView">
+      <h2 class="sectionTitle">Είσοδος συνεργάτη</h2>
+      <p class="muted">Συνδεθείτε με το κινητό και τον κωδικό σας για να δείτε τα στοιχεία του λογαριασμού σας.</p>
+
+      <div class="field">
+        <label for="loginPhone">Κινητό</label>
+        <input id="loginPhone" type="tel" inputmode="numeric" placeholder="69XXXXXXXX">
+      </div>
+
+      <div class="field">
+        <label for="loginPassword">Κωδικός</label>
+        <input id="loginPassword" type="password" placeholder="Ο κωδικός σας">
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnLogin" type="button">Είσοδος</button>
+        <button class="btn ghost" id="btnForgot" type="button">Ξέχασα τον κωδικό μου</button>
+      </div>
+    </section>
+
+<section class="stack hidden" id="adminView">
+  <div class="card">
+    <div class="actions" style="justify-content:space-between; margin-bottom:12px;">
+      <h2 class="sectionTitle" style="margin:0;">Συνεργάτες</h2>
+      <button class="btn ghost" id="btnLogoutAdminPartners" type="button">Log out Admin</button>
+    </div>
+
+    <div class="stats" id="adminStats">
+      <div class="stat">
+        <div class="statLabel">Clicks</div>
+        <div class="statValue" id="adminStatClicks">0</div>
+      </div>
+      <div class="stat">
+        <div class="statLabel">Leads</div>
+        <div class="statValue" id="adminStatLeads">0</div>
+      </div>
+      <div class="stat">
+        <div class="statLabel">Purchases</div>
+        <div class="statValue" id="adminStatPurchases">0</div>
+      </div>
+      <div class="stat">
+        <div class="statLabel">Balance</div>
+        <div class="statValue" id="adminStatBalance">0€</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="sectionTitle">Λίστα συνεργατών</h2>
+
+    <div class="item">
+      <div class="row" style="font-weight:700;">
+        <div style="flex:2;">Όνομα</div>
+        <div style="width:70px; text-align:right;">Clicks</div>
+        <div style="width:70px; text-align:right;">Leads</div>
+        <div style="width:90px; text-align:right;">Purchases</div>
+        <div style="width:90px; text-align:right;">Balance</div>
+        <div style="width:50px; text-align:right;"></div>
+      </div>
+    </div>
+
+    <div id="partnersAdminList" class="stack">
+      <div class="item muted">Δεν υπάρχουν ακόμη συνεργάτες.</div>
+    </div>
+  </div>
+</section>
+
+    <section class="stack hidden" id="dashboardView">
+
+      <div class="grid">
+        <div class="stack">
+          <div class="card">
+            <h2 class="sectionTitle">Στοιχεία συνεργάτη</h2>
+            <div class="stack" style="gap:10px;">
+              <div><strong id="partnerName">—</strong></div>
+              <div class="muted">Κινητό: <span id="partnerPhone">—</span></div>
+              <div class="muted">Email: <span id="partnerEmail">—</span></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="sectionTitle">Το ref link σας</h2>
+<div class="refBox">
+  <div class="refLink" id="partnerRefLink">—</div>
+
+  <div class="actions">
+    <button class="btn ghost" id="btnShareInline" type="button">Κοινοποίηση</button>
+    <button class="btn ghost" id="btnQrOpen" type="button">QR Code</button>
+  </div>
+</div>
+</div>
+
+          <div class="card">
+            <h2 class="sectionTitle">Συστάσεις</h2>
+            <div class="leadsList" id="leadsList">
+              <div class="item muted">Δεν υπάρχουν ακόμη στοιχεία.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stack">
+          <div class="card">
+            <h2 class="sectionTitle">Στατιστικά</h2>
+            <div class="stats">
+              <div class="stat">
+                <div class="statLabel">Clicks</div>
+                <div class="statValue" id="statClicks">0</div>
+              </div>
+              <div class="stat">
+                <div class="statLabel">Συστάσεις</div>
+                <div class="statValue" id="statLeads">0</div>
+              </div>
+              <div class="stat">
+                <div class="statLabel">Αγορές</div>
+                <div class="statValue" id="statPurchases">0</div>
+              </div>
+              <div class="stat">
+                <div class="statLabel">Κέρδη</div>
+                <div class="statValue" id="statEarnings">0€</div>
+              </div>
+              <div class="stat">
+                <div class="statLabel">Υπόλοιπο</div>
+                <div class="statValue" id="statBalance">0€</div>
+              </div>
+              <div class="stat">
+                <div class="statLabel">Πληρωμές</div>
+                <div class="statValue" id="statPayments">0€</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="sectionTitle">Πληρωμές προς συνεργάτη</h2>
+            <div class="paymentsList" id="paymentsList">
+              <div class="item muted">Δεν υπάρχουν ακόμη πληρωμές.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+  async function addPartnerPayment(partner_id){
+
+  const amount = prompt("Ποσό πληρωμής (€)");
+
+  if(!amount) return;
+
+  const value = Number(amount);
+
+  if(!Number.isFinite(value) || value <= 0){
+    alert("Μη έγκυρο ποσό");
+    return;
+  }
+
+  const r = await fetch("/api/partners/payment/add",{
+    method:"POST",
+    headers:{
+      "content-type":"application/json",
+      "authorization":"Bearer " + localStorage.getItem("ADMIN_SESSION")
+    },
+    body: JSON.stringify({
+      partner_id,
+      amount:value
+    })
+  });
+
+  const data = await r.json();
+
+  if(!data.ok){
+    alert("Αποτυχία καταχώρησης");
+    return;
+  }
+
+  alert("Η πληρωμή καταχωρήθηκε");
+
+  location.reload();
+}
+  
+  <script>
+const brandLine = document.querySelector(".title");
+const adminToken = localStorage.getItem("ADMIN_SESSION");
+const isAdmin = !!adminToken;
+
+if (isAdmin) {
+  const adminLink = document.createElement("a");
+  adminLink.href = "/admin";
+  adminLink.className = "adminLink";
+  adminLink.innerText = "Admin";
+  brandLine.appendChild(adminLink);
+
+  const adminTitle = document.getElementById("adminPageTitle");
+  if (adminTitle) adminTitle.classList.remove("hidden");
+}
+
+let partner = null;
+
+const loginView = document.getElementById("loginView");
+const dashboardView = document.getElementById("dashboardView");
+const adminView = document.getElementById("adminView");
+const btnLogin = document.getElementById("btnLogin");
+const btnShareInline = document.getElementById("btnShareInline");
+const btnQrOpen = document.getElementById("btnQrOpen");
+const partnerRefLinkEl = document.getElementById("partnerRefLink");
+
+function showDashboard() {
+  loginView.classList.add("hidden");
+  dashboardView.classList.remove("hidden");
+}
+
+function showLogin() {
+  loginView.classList.remove("hidden");
+  dashboardView.classList.add("hidden");
+}
+
+function copyRef() {
+  const link = document.getElementById("partnerRefLink").innerText;
+  navigator.clipboard.writeText(link);
+  alert("Το link αντιγράφηκε.");
+}
+
+async function shareRef() {
+
+  const link = document.getElementById("partnerRefLink").innerText;
+
+  if (navigator.share) {
+    await navigator.share({
+      title: "WeddingEla",
+      text: "Δείτε το ψηφιακό προσκλητήριο",
+      url: link
+    });
+  } else {
+    copyRef();
+  }
+
+}
+
+btnShareInline?.addEventListener("click", shareRef);
+partnerRefLinkEl?.addEventListener("click", copyRef);
+
+async function tryAutoLogin() {
+
+  const token = localStorage.getItem("PARTNER_SESSION");
+  if (!token) return;
+
+  try {
+
+    const r = await fetch("/api/partners/me", {
+      headers: {
+        authorization: "Bearer " + token
+      }
+    });
+
+    const data = await r.json();
+
+    if (!data.ok) {
+      localStorage.removeItem("PARTNER_SESSION");
+      return;
+    }
+
+    partner = data.partner;
+
+    document.getElementById("partnerName").innerText = partner.full_name;
+    document.getElementById("partnerPhone").innerText = partner.phone;
+    document.getElementById("partnerEmail").innerText = partner.email;
+
+    document.getElementById("partnerRefLink").innerText =
+      "https://weddingela.gr/ref/" + partner.ref_code;
+
+    showDashboard();
+
+  } catch(e) {}
+
+}
+
+if (!isAdmin) {
+  tryAutoLogin();
+}
+
+async function loadPartnersAdmin() {
+
+  const r = await fetch("/api/partners/list", {
+    headers: {
+      authorization: "Bearer " + localStorage.getItem("ADMIN_SESSION")
+    }
+  });
+
+  const data = await r.json();
+
+  if (!data.ok) return;
+
+  const list = document.getElementById("partnersAdminList");
+  list.innerHTML = "";
+
+  let totalClicks = 0;
+  let totalLeads = 0;
+  let totalPurchases = 0;
+  let totalBalance = 0;
+
+  data.items.forEach(p => {
+
+    totalClicks += p.clicks;
+    totalLeads += p.leads;
+    totalPurchases += p.purchases;
+    totalBalance += p.balance;
+
+    const row = document.createElement("div");
+    row.className = "item";
+
+row.innerHTML = `
+  <div class="row">
+    <div style="flex:2;">${p.full_name}</div>
+    <div style="width:70px; text-align:right;">${p.clicks}</div>
+    <div style="width:70px; text-align:right;">${p.leads}</div>
+    <div style="width:90px; text-align:right;">${p.purchases}</div>
+    <div style="width:90px; text-align:right;">${p.balance}€</div>
+    <div style="width:50px; text-align:right;">
+      <button class="btn ghost" type="button" onclick="togglePartnerAdmin(${p.id}, this)">👁</button>
+    </div>
+  </div>
+
+  <div class="hidden" id="partnerAdminDetail-${p.id}" style="margin-top:12px;"></div>
+`;
+
+    list.appendChild(row);
+
+  });
+
+  document.getElementById("adminStatClicks").innerText = totalClicks;
+  document.getElementById("adminStatLeads").innerText = totalLeads;
+  document.getElementById("adminStatPurchases").innerText = totalPurchases;
+  document.getElementById("adminStatBalance").innerText = totalBalance + "€";
+
+}
+
+if (isAdmin) {
+
+  loginView.classList.add("hidden");
+  dashboardView.classList.add("hidden");
+  adminView.classList.remove("hidden");
+  loadPartnersAdmin();
+}
+
+async function togglePartnerAdmin(id, btn) {
+  const box = document.getElementById("partnerAdminDetail-" + id);
+  if (!box) return;
+
+  // αν είναι ήδη ανοιχτό → κλείσε
+  if (!box.classList.contains("hidden")) {
+    box.classList.add("hidden");
+    box.innerHTML = "";
+    return;
+  }
+
+  // κλείσε όλα τα άλλα
+  document.querySelectorAll("[id^='partnerAdminDetail-']").forEach(el => {
+    el.classList.add("hidden");
+    el.innerHTML = "";
+  });
+
+  box.classList.remove("hidden");
+  box.innerHTML = `<div class="muted">Φόρτωση...</div>`;
+
+  try {
+    const r = await fetch("/api/partners/detail?id=" + id, {
+    if (url.pathname === "/api/partners/payment/add" && request.method === "POST") {
+
+  const auth = request.headers.get("authorization") || "";
+  const token = auth.replace("Bearer ", "");
+
+  if (!token || token !== env.ADMIN_SESSION) {
+    return Response.json({ ok:false, error:"unauthorized" }, { status:401 });
+  }
+
+  const body = await request.json();
+  const partner_id = Number(body.partner_id);
+  const amount = Number(body.amount);
+
+  if (!partner_id || !amount || amount <= 0) {
+    return Response.json({ ok:false, error:"invalid_data" });
+  }
+
+  await env.DB.prepare(`
+    INSERT INTO partner_payments (
+      partner_id,
+      amount,
+      created_at
+    )
+    VALUES (?, ?, datetime('now'))
+  `)
+  .bind(partner_id, amount)
+  .run();
+
+  return Response.json({ ok:true });
+}
+      headers: {
+        authorization: "Bearer " + localStorage.getItem("ADMIN_SESSION")
+      }
+    });
+
+    const data = await r.json();
+
+    if (!data.ok) {
+      box.innerHTML = `<div class="muted">Δεν ήταν δυνατή η φόρτωση.</div>`;
+      return;
+    }
+
+    const p = data.partner;
+    const s = data.stats;
+    const payments = data.payments || [];
+
+    box.innerHTML = `
+      <div class="card">
+        <div class="stack" style="gap:10px;">
+          <div><strong>${p.full_name || "—"}</strong></div>
+          <div class="muted">Κινητό: ${p.phone || "—"}</div>
+          <div class="muted">Email: ${p.email || "—"}</div>
+          <div class="muted">Ref code: ${p.ref_code || "—"}</div>
+          <div class="muted">Status: ${p.is_active ? "Active" : "Inactive"}</div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="statLabel">Clicks</div>
+              <div class="statValue">${s.clicks}</div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Leads</div>
+              <div class="statValue">${s.leads}</div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Purchases</div>
+              <div class="statValue">${s.purchases}</div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Earnings</div>
+              <div class="statValue">${s.earnings}€</div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Payments</div>
+              <div class="statValue">${s.payments}€</div>
+            </div>
+            <div class="stat">
+              <div class="statLabel">Balance</div>
+              <div class="statValue">${s.balance}€</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="sectionTitle" style="margin-top:8px;">Πληρωμές</div>
+            <button class="btnSmall" onclick="addPartnerPayment(${p.id})">
+			+ Προσθήκη πληρωμής
+			</button>
+            <div class="paymentsList">
+              ${
+                payments.length
+                  ? payments.map(pay => `
+                    <div class="item">
+                      <div class="row">
+                        <div>${pay.amount}€</div>
+                        <div class="muted">${pay.created_at || ""}</div>
+                      </div>
+                    </div>
+                  `).join("")
+                  : `<div class="item muted">Δεν υπάρχουν ακόμη πληρωμές.</div>`
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    box.innerHTML = `<div class="muted">Προσωρινό πρόβλημα φόρτωσης.</div>`;
+  }
+}
+
+btnLogin?.addEventListener("click", async () => {
+
+  const phone = document.getElementById("loginPhone").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!phone || !password) {
+    alert("Συμπληρώστε κινητό και κωδικό.");
+    return;
+  }
+
+  try {
+
+    const r = await fetch("/api/partners/login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        phone,
+        password
+      })
+    });
+
+    const data = await r.json();
+
+    if (!data.ok) {
+      alert("Λάθος στοιχεία.");
+      return;
+    }
+
+    partner = data.partner;
+    
+localStorage.setItem("PARTNER_SESSION", data.session_token);
+
+    document.getElementById("partnerName").innerText = partner.full_name;
+    document.getElementById("partnerPhone").innerText = partner.phone;
+    document.getElementById("partnerEmail").innerText = partner.email;
+
+    document.getElementById("partnerRefLink").innerText =
+      "https://weddingela.gr/ref/" + partner.ref_code;
+
+    showDashboard();
+
+  } catch (e) {
+
+    alert("Προσωρινό πρόβλημα σύνδεσης.");
+
+  }
+
+});
+
+btnQrOpen?.addEventListener("click", () => {
+  if (!partner) return;
+
+  const url =
+    "https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=" +
+    encodeURIComponent("https://weddingela.gr/ref/" + partner.ref_code);
+
+  window.open(url, "_blank");
+});
+
+const btnLogoutAdminPartners = document.getElementById("btnLogoutAdminPartners");
+
+btnLogoutAdminPartners?.addEventListener("click", () => {
+  localStorage.removeItem("ADMIN_SESSION");
+  location.reload();
+});
+
+</script>
+  
+</body>
+</html>

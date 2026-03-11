@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin • WeddingEla.gr</title>
+
+  <link rel="stylesheet" href="/style.css">
+  <link rel="manifest" href="/manifest-admin.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <meta name="theme-color" content="#c6a86b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="WeddingEla">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <style>
+    .contactEmail{ font-size:.92em; opacity:.75; }
+
+    /* κάνε τα ονόματα να μη φουσκώνουν το ύψος */
+    .couple div{ line-height:1.15; }
+    .couple div:first-child{ font-weight:700; }
+    .couple div:last-child{ opacity:.8; }
+
+    /* ✅ ΠΑΝΤΑ 2 σειρές */
+    .actionsGrid{
+      display:grid;
+      grid-template-columns:max-content max-content max-content;
+      grid-template-areas:
+        "form rsvp paid"
+        "inv  partner del";
+      gap:4px 6px;
+      align-items:center;
+
+      overflow-x:auto;
+      overflow-y:hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .actionsGrid::-webkit-scrollbar{ display:none; }
+
+    .btnForm{grid-area:form;}
+    .btnRSVP{grid-area:rsvp;}
+    .btnPaid{grid-area:paid; justify-self:end;}
+    .btnInv{grid-area:inv;}
+    .btnPartner{grid-area:partner; justify-self:center;}
+    .btnDel{grid-area:del; justify-self:end;}
+
+    .actionsGrid .btn{
+      width:fit-content;
+      padding:4px 8px;
+      font-size:.88em;
+      line-height:1.1;
+      border-radius:6px;
+      white-space:nowrap; /* ✅ να μη σπάει το κείμενο */
+    }
+
+    .crmStats{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      margin:14px 0 10px;
+      flex-wrap:wrap;
+      font-size:1rem;
+    }
+
+    .crmStat{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:0;
+      border:none;
+      border-radius:0;
+      background:none;
+      font-size:1rem;
+      transition:opacity .18s ease, transform .18s ease;
+    }
+
+    .crmStat[onclick]{
+      cursor:pointer;
+    }
+
+    .crmStat[onclick]:hover{
+      opacity:.72;
+      transform:translateY(-1px);
+    }
+
+    .crmStat span{
+      font-size:1.05rem;
+    }
+
+    .crmStat strong{
+      font-size:1.05rem;
+      font-weight:800;
+    }
+
+    @media (max-width:700px){
+      .crmStats{
+        gap:16px;
+      }
+    }
+  </style>
+</head>
+<body class="pageAdmin" data-theme="ivory-gold">  <main class="shell">
+<img class="kicker" src="/images/weddingela-logo.png" alt="WeddingEla">
+    <header class="topbar">
+<div class="brand">
+  <div class="brandTop">
+    <button id="btnLogoutTop" class="logoutLink" type="button" style="display:none;">
+      Logout
+    </button>
+  </div>
+  <div class="crmStats" id="crmStats">
+  <div class="crmStat"><span>💌</span><strong id="stat-leads">0</strong></div>
+  <div class="crmStat"><span>💍</span><strong id="stat-events">0</strong></div>
+  <div class="crmStat"><span>💳</span><strong id="stat-paid">0</strong></div>  
+  <div class="crmStat" style="cursor:pointer;" onclick="location.href='/partners'">
+  <span>🤝</span><strong id="stat-partners">0</strong>
+  </div>
+  <div class="crmStat" style="cursor:pointer;" onclick="location.href='/archive.html'">
+  <span>📦</span><strong id="stat-archived">0</strong>
+  </div>
+  </div>
+
+    </header>
+
+    <!-- LOGIN -->
+    <section class="card" id="loginCard">
+      <div class="row row-2">
+        <div class="field">
+          <label>Admin Password</label>
+          <input id="adminKey" class="input" type="password" autocomplete="current-password" placeholder="••••••••">
+        </div>
+
+        <div class="field">
+          <label>&nbsp;</label>
+          <div class="row">
+            <button class="btn primary" id="btnLogin" type="button">Login</button>
+          </div>
+          <div class="hint" id="loginStatus"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL -->
+    <section class="card" id="panel" style="display:none;">
+      <div class="row row-2">
+        <div class="field">
+          <div class="row row-2">
+            <input id="clientEmail" class="input" placeholder="Email (προαιρετικό)" inputmode="email" autocomplete="off">
+            <input id="clientPhone" class="input" placeholder="Τηλέφωνο (προαιρετικό)" inputmode="tel" autocomplete="off">
+          </div>
+
+<div class="row" style="margin-top:10px; display:flex; gap:10px; align-items:center;">
+
+  <button class="btn soft" id="btnCreate" type="button">Create tokens</button>
+
+  <button class="btn soft" id="btnPrices" type="button">Price</button>
+
+  <button class="btn soft" id="pay85" type="button">Payment</button>
+
+<button class="btn soft" id="btnEnablePush" type="button">Ειδοποιήσεις</button>
+
+  <button class="btn ghost" id="btnRefresh" type="button">Refresh list</button>
+
+</div>
+
+<div class="hint" id="createStatus" style="margin-top:6px;"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <div style="overflow:auto;">
+          <table class="tbl" style="min-width:720px;">
+            <thead>
+              <tr>
+<th>Ζευγάρι</th>
+<th>Contact</th>
+<th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<dialog id="dlgPrices" style="max-width:420px;width:92%;border:0;border-radius:14px;padding:14px;">
+  <form method="dialog" id="pricesForm">
+    <h3 style="margin:0 0 10px 0;">Τιμές πακέτου</h3>
+
+    <div class="row row-2" style="gap:10px;">
+      <div class="field">
+        <label>Price A</label>
+        <input id="price_a" class="input" inputmode="numeric" placeholder="0-500" />
+      </div>
+      <div class="field">
+        <label>Price B</label>
+        <input id="price_b" class="input" inputmode="numeric" placeholder="0-500" />
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="field" style="width:100%;">
+        <label>Price C</label>
+        <input id="price_c" class="input" inputmode="numeric" placeholder="0-500" />
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:14px; display:flex; gap:10px; justify-content:flex-end;">
+      <button class="btn ghost" value="cancel">Cancel</button>
+	  <button class="btn primary" id="btnPricesSave" type="button">Save</button>
+    </div>
+
+    <div class="hint" id="pricesHint" style="margin-top:8px;"></div>
+  </form>
+</dialog>
+
+<script>
+
+(async () => {
+  const WORKER_BASE = "";
+  const API = (path) => WORKER_BASE + path;
+  const $ = (id) => document.getElementById(id);
+  const VAPID_PUBLIC_KEY = "BOCJtoX3Cddmn_HGCDzGkVQenylicDxklm3rMjBiFd8Zu8Q1R_95LXKxR52H1fk_4SuIxO8DvH7LZVK9L8gM56g";
+
+let price_a = 85;
+let price_b = 70;
+let price_c = 20;
+  const adminKeyEl  = $("adminKey");
+  const loginStatus = $("loginStatus");
+  const createStatus= $("createStatus");
+  const loginCard   = $("loginCard");
+  const panel       = $("panel");
+  const btnLogoutTop= $("btnLogoutTop");
+  const btnLogin    = $("btnLogin");
+  const btnCreate   = $("btnCreate");
+  const btnPay85    = $("pay85");
+  const btnRefresh  = $("btnRefresh");
+  const emailEl     = $("clientEmail");
+  const phoneEl     = $("clientPhone");
+  const rowsEl      = $("rows");
+  const btnPrices = $("btnPrices");
+  const btnPricesSave = $("btnPricesSave");
+  const pricesHint = $("pricesHint");
+  const btnEnablePush = $("btnEnablePush");
+  // εμφάνιση κουμπιού μόνο αν υποστηρίζονται push notifications
+if (
+  !("Notification" in window) ||
+  !("serviceWorker" in navigator) ||
+  !("PushManager" in window)
+) {
+  if (btnEnablePush) btnEnablePush.style.display = "none";
+}
+
+let ADMIN_SESSION = localStorage.getItem("ADMIN_SESSION") || "";
+  const hint = (el, msg = "", ok = true) => {
+    el.textContent = msg;
+    el.className = "hint " + (ok ? "" : "bad");
+  };
+  const setLogin = (msg, ok = true) => hint(loginStatus, msg, ok);
+  const setCreate= (msg, ok = true) => hint(createStatus, msg, ok);
+
+  const setAuthUI = (logged) => {
+    loginCard.style.display = logged ? "none" : "";
+    panel.style.display     = logged ? "" : "none";
+    btnLogoutTop.style.display = logged ? "" : "none";
+    btnLogin.style.display  = logged ? "none" : "";
+  };
+
+  const fmtDMY = (iso) => {
+    if (!iso) return "—";
+    const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${Number(m[3])}-${Number(m[2])}-${m[1]}` : iso;
+  };
+
+  const coupleHTML = (groom, bride) => {
+    const g = (groom || "").trim();
+    const b = (bride || "").trim();
+    if (g && b) return `<div class="couple"><div>${g}</div><div>${b}</div></div>`;
+    return g || b || "—";
+  };
+
+  const safeAttr = (s) => String(s || "").replace(/"/g, "&quot;");
+  const payLink = (amount) => `https://mypos.com/@MonteCristoEvents/${amount}`;
+
+  async function api(path, opts = {}) {
+    const headers = { "content-type": "application/json", ...(opts.headers || {}) };
+    if (ADMIN_SESSION) headers.authorization = "Bearer " + ADMIN_SESSION;
+
+    const res = await fetch(API(path), { ...opts, headers });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+    return data;
+  }
+
+function handle401(e) {
+  const msg = String(e?.message || "");
+
+  if (msg.includes("401") || msg.toLowerCase().includes("unauthor")) {
+    ADMIN_SESSION = "";
+    localStorage.removeItem("ADMIN_SESSION");
+    setAuthUI(false);
+    setLogin("Session έληξε. Ξανακάνε login.", false);
+    return true;
+  }
+
+  return false;
+}
+
+function actionsLeadHTML(leadId, partner_ref) {
+  const id = safeAttr(String(leadId || ""));
+  const pref = String(partner_ref || "").trim();
+
+  return `
+    <div class="actionsGrid">
+      <button class="btn primary btnForm" type="button" data-lead-convert="${id}" data-partner-ref="${safeAttr(pref)}">Create tokens</button>
+      <span></span>
+      <span></span>
+
+      <span></span>
+      ${pref ? `<span class="btn soft btnPartner" title="Partner">${pref}</span>` : `<span></span>`}
+      <button class="btn ghost danger btnDel" type="button" data-lead-del="${id}">Del</button>
+    </div>
+  `;
+}
+
+function actionsHTML(urls, formToken, paid_amount, partner_ref, partner_name) {
+  const f = urls?.form || "";
+  const i = urls?.invitation || "";
+  const r = urls?.rsvp || "";
+  const tok = safeAttr(formToken);
+  const pref = String(partner_ref || "").trim();
+
+  const hasAmount = paid_amount != null;
+
+  const label = hasAmount
+    ? String(paid_amount)
+    : "Not Paid";
+
+  const btnClass = hasAmount
+    ? "ghost"
+    : "primary";
+
+  return `
+    <div class="actionsGrid">
+      ${f ? `<a class="btn soft btnForm" target="_blank" rel="noopener" href="${f}">Form</a>` : `<span></span>`}
+      ${r ? `<a class="btn soft btnRSVP" target="_blank" rel="noopener" href="${r}">RSVP</a>` : `<span></span>`}
+
+	  <button
+  	  class="btn ${paid_amount == null ? "primary" : "ghost"} btnPaid"
+  	  type="button"
+  	  data-paid-toggle="${tok}"
+	  >${paid_amount == null ? "Not Paid" : String(paid_amount)}</button>
+      ${i ? `<a class="btn soft btnInv" target="_blank" rel="noopener" href="${i}">Invit.</a>` : `<span></span>`}
+	  ${pref ? `<span class="btn soft btnPartner" title="${safeAttr(partner_name || pref)}">${pref}</span>` : `<span></span>`}
+      <button class="btn ghost danger btnDel" type="button" data-del="${tok}">Del</button>
+    </div>
+  `;
+}
+
+function renderList(items) {
+  if (!items.length) {
+    rowsEl.innerHTML = `<tr><td colspan="3" class="muted">Δεν βρέθηκαν εγγραφές.</td></tr>`;
+    return;
+  }
+
+  // 24/1/26
+  const fmtDMYshort = (iso) => {
+    if (!iso) return "—";
+    const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!m) return iso;
+    const yy = m[1].slice(2);           // 2026 -> 26
+    return `${Number(m[3])}/${Number(m[2])}/${yy}`;
+  };
+
+  rowsEl.innerHTML = items.map(it => {
+    const couple = coupleHTML(it.couple?.groom_name, it.couple?.bride_name);
+    const date   = fmtDMYshort(it.wedding_date);
+    const phone  = it.phone || "—";
+    const email  = it.email || "—";
+
+    return `
+      <tr>
+        <td>
+          <div class="contactEmail">${date}</div>
+          ${couple}
+        </td>
+        <td>
+          <div>${phone}</div>
+          <div class="contactEmail">${email}</div>
+        </td>
+        <td>${
+  it.kind === "lead"
+  ? actionsLeadHTML(it.lead_id, it.partner_ref)
+  : actionsHTML(it.urls, it.form_token, it.paid_amount, it.partner_ref, it.partner_name)
+}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+  async function refreshList() {
+    if (!ADMIN_SESSION) {
+      rowsEl.innerHTML = `<tr><td colspan="4" class="muted">Κάνε login για να δεις τη λίστα.</td></tr>`;
+      return;
+    }
+    rowsEl.innerHTML = `<tr><td colspan="4" class="muted">Loading…</td></tr>`;
+    const data = await api("/api/admin/list", { method: "GET" });
+    const stats = data.stats || {};
+
+$("stat-leads").textContent = stats.leads ?? 0;
+$("stat-events").textContent = stats.events ?? 0;
+$("stat-paid").textContent = stats.paid ?? 0;
+$("stat-partners").textContent = stats.partners ?? 0;
+$("stat-archived").textContent = stats.archived_paid ?? 0;
+	const items = [...(data.items || [])].sort((a, b) => {
+  	const aLead = a.kind === "lead";
+  	const bLead = b.kind === "lead";
+
+  // 1) πρώτα τα leads
+  if (aLead && !bLead) return -1;
+  if (!aLead && bLead) return 1;
+
+// 2) leads μεταξύ τους: κράτα τη σειρά όπως έρχεται από το API
+if (aLead && bLead) {
+  return 0;
+}
+
+  // 3) events μεταξύ τους: παλιότερη ημερομηνία γάμου πρώτα
+  const ad = String(a.wedding_date || "9999-12-31");
+  const bd = String(b.wedding_date || "9999-12-31");
+  return ad.localeCompare(bd);
+});
+
+renderList(items);
+await syncBadgeFromList(items);
+  }
+
+  async function login() {
+    const pw = (adminKeyEl.value || "").trim();
+    if (!pw) return setLogin("Βάλε password.", false);
+
+    setLogin("Logging in…", true);
+
+    try {
+      const res = await fetch(API("/api/admin/login"), {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ password: pw })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+
+      ADMIN_SESSION = String(data.session_token || "").trim();
+      if (!ADMIN_SESSION) throw new Error("No session token returned");
+      localStorage.setItem("ADMIN_SESSION", ADMIN_SESSION);
+
+      setAuthUI(true);
+      setLogin("OK ✅", true);
+      await refreshList();
+    } catch (e) {
+      ADMIN_SESSION = "";
+      setAuthUI(false);
+      setLogin(e.message || "Login failed", false);
+    }
+  }
+
+function logout() {
+  ADMIN_SESSION = "";
+  localStorage.removeItem("ADMIN_SESSION");
+  adminKeyEl.value = "";
+  setAuthUI(false);
+  setLogin("Logged out.", true);
+  rowsEl.innerHTML = "";
+}
+
+  function openPayEmail() {
+    const body =
+`Χαίρετε!
+
+Μπορείτε να ολοκληρώσετε την πληρωμή με κάρτα, Apple Pay ή Google Pay μέσω του παρακάτω ασφαλούς συνδέσμου:
+	
+${payLink(price_a)}
+	
+Στην αιτιολογία γράψτε το κινητό σας τηλέφωνο.
+	
+	
+Για οποιαδήποτε απορία μπορείτε να επικοινωνήσετε μαζί μου.
+info@weddingela.gr
+693 694 6608
+	
+Χρήστος Κυριακίδης`;
+
+    location.href =
+      "mailto:" +
+      "?subject=" + encodeURIComponent("weddingela.gr - Payment") +
+      "&body=" + encodeURIComponent(body.replace(/\r?\n/g, "\r\n"));
+
+    setCreate("", true);
+  }
+
+  function createMailBody(formUrl, priceText, amount) {
+return `Καλωσήρθατε!
+	
+Ευχαριστώ για το ενδιαφέρον σας για το weddingEla.
+	
+Για να ενεργοποιηθεί το ψηφιακό προσκλητήριο του γάμου σας, ακολουθήστε τα παρακάτω βήματα:
+	
+	
+1️⃣ Ολοκληρώστε την πληρωμή:
+Τιμή: ${priceText}
+	
+${payLink(amount)}
+	
+Στην αιτιολογία γράψτε το κινητό σας τηλέφωνο.
+	
+	
+2️⃣ Συμπληρώστε τα στοιχεία του γάμου:
+	
+${formUrl}
+	
+	
+Μόλις ολοκληρωθούν τα παραπάνω, το weddingEla σας θα ενεργοποιηθεί μέσα σε μία εργάσιμη ημέρα.
+	
+Για οποιαδήποτε απορία μπορείτε να επικοινωνήσετε μαζί μου.
+info@weddingela.gr
+693 694 6608
+	
+Χρήστος Κυριακίδης`;
+  }
+
+function openCreateMailto(toEmail, formUrl, priceText, amount) {
+  const subject = "Ψηφιακό προσκλητήριο – Ολοκλήρωση";
+  const body = createMailBody(formUrl, priceText, amount);
+
+    location.href =
+      "mailto:" + encodeURIComponent((toEmail || "").trim()) +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body.replace(/\r?\n/g, "\r\n"));
+  }
+
+  async function createTokens() {
+    if (!ADMIN_SESSION) return setCreate("Κάνε login πρώτα.", false);
+    setCreate("Creating…", true);
+
+    try {
+      const payload = { email: (emailEl.value || "").trim(), phone: (phoneEl.value || "").trim() };
+      const data = await api("/api/create", { method: "POST", body: JSON.stringify(payload) });
+
+      const rawFormUrl = data?.urls?.form || "";
+	  const formUrl = rawFormUrl.startsWith("http")
+  ? rawFormUrl
+  : `https://weddingela.gr${rawFormUrl}`;
+  
+      const toEmail = payload.email;
+
+		const priceText = `${price_a}€`;
+		const amount = price_a;
+
+		if (formUrl && toEmail) {
+  		openCreateMailto(toEmail, formUrl, priceText, amount);
+        emailEl.value = "";
+        phoneEl.value = "";
+        setCreate("", true);
+      } else if (!toEmail) {
+        setCreate("Created ✅ (δεν έχεις βάλει email)", true);
+      } else {
+        setCreate("Created ✅ (χωρίς form url)", true);
+      }
+
+      await refreshList();
+    } catch (e) {
+      if (!handle401(e)) setCreate(e.message || "Create failed", false);
+    }
+  }
+
+async function deleteEventFlow(formToken, btn) {
+  if (!ADMIN_SESSION) return setCreate("Κάνε login πρώτα.", false);
+  if (!formToken) return setCreate("Λείπει form_token.", false);
+
+  const step1 = confirm(
+`Διαγραφή event:
+
+OK     → Archive (ασφαλές, μπορεί να επανέλθει)
+Cancel → Hard delete επιλογή`
+  );
+
+  let mode = "archive";
+  if (!step1) {
+    const hard = confirm("Hard delete = ΟΡΙΣΤΙΚΗ διαγραφή.\nΔεν μπορεί να επανέλθει.\n\nΣυνέχεια;");
+    if (!hard) return;
+    mode = "hard";
+  }
+
+  const tr = btn?.closest("tr") || null;
+
+  try {
+    setCreate(mode === "archive" ? "Archiving…" : "Deleting permanently…", true);
+
+    await api("/api/admin/delete", {
+      method: "POST",
+      body: JSON.stringify({ form_token: formToken, mode })
+    });
+
+    setCreate(mode === "archive" ? "Archived ✅" : "Deleted permanently ✅", true);
+
+    // ✅ remove only this row (no full refresh)
+    tr?.remove();
+
+    // ✅ αν δεν έμεινε τίποτα, βάλε το empty row
+    if (!rowsEl.querySelector("tr")) {
+      rowsEl.innerHTML = `<tr><td colspan="4" class="muted">Δεν βρέθηκαν εγγραφές.</td></tr>`;
+    }
+
+  } catch (e) {
+    if (!handle401(e)) setCreate(e.message || "Delete failed", false);
+  }
+}
+
+async function togglePaid(btn) {
+  const formToken = btn.getAttribute("data-paid-toggle") || "";
+
+  const currentText = btn.textContent?.trim() || "";
+  const currentIsPaid = currentText !== "" && currentText !== "Not Paid";
+
+  const input = prompt(
+    currentIsPaid
+      ? `Τωρινό ποσό: ${currentText}\nΒάλε νέο ποσό (0-500) ή άφησε κενό για Not Paid`
+      : `Βάλε ποσό (0-500) ή άφησε κενό για Not Paid`,
+    currentIsPaid ? currentText : ""
+  );
+
+  if (input === null) return; // cancel
+
+  const v = String(input).trim();
+
+  let paid_amount = null;
+
+  if (v !== "") {
+    const n = Number(v);
+    if (!Number.isInteger(n) || n < 0 || n > 500) {
+      alert("Δεκτός ακέραιος αριθμός 0-500 ή κενό για Not Paid.");
+      return;
+    }
+    paid_amount = n;
+  }
+
+  try {
+    const res = await api("/api/admin/paid", {
+      method: "POST",
+      body: JSON.stringify({
+        form_token: formToken,
+        paid_amount
+      })
+    });
+
+    btn.textContent = paid_amount == null ? "Not Paid" : String(paid_amount);
+
+	btn.classList.toggle("primary", paid_amount == null);
+	btn.classList.toggle("ghost", paid_amount != null);
+
+  } catch (e) {
+    if (!handle401(e))
+      alert("Paid update failed");
+  }
+}
+
+  btnLogin.addEventListener("click", login);
+  btnLogoutTop?.addEventListener("click", logout);
+  btnPay85?.addEventListener("click", openPayEmail);
+  btnCreate.addEventListener("click", createTokens);
+  btnEnablePush?.addEventListener("click", enablePush);
+
+async function enablePush() {
+
+  try {
+    if (!('Notification' in window)) {
+      alert("Αυτός ο browser δεν υποστηρίζει notifications.");
+      return;
+    }
+
+    if (!('serviceWorker' in navigator)) {
+      alert("Δεν βρέθηκε service worker.");
+      return;
+    }
+
+const permission = await Notification.requestPermission();
+
+if (permission !== "granted") {
+  alert("Δεν δόθηκε άδεια για ειδοποιήσεις.");
+  return;
+}
+
+const reg = await navigator.serviceWorker.ready;
+
+let sub = await reg.pushManager.getSubscription();
+
+if (!sub) {
+  sub = await reg.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+  });
+}
+
+await fetch("/api/push/subscribe", {
+  method: "POST",
+  headers: {
+    "content-type": "application/json",
+    "authorization": "Bearer " + localStorage.getItem("ADMIN_SESSION")
+  },
+  body: JSON.stringify(sub)
+});
+
+btnEnablePush.textContent = "Ειδοποιήσεις OK";
+btnEnablePush.disabled = true;
+
+  } catch (e) {
+    console.error("enablePush failed", e);
+    alert("Σφάλμα ενεργοποίησης ειδοποιήσεων.");
+  }
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+
+async function syncBadgeFromList(items = []) {
+  try {
+    if (!('setAppBadge' in navigator) || !('clearAppBadge' in navigator)) return;
+
+    const pending = items.filter(it => it.kind === "lead").length;
+
+    if (pending > 0) {
+      await navigator.setAppBadge(pending);
+    } else {
+      await navigator.clearAppBadge();
+    }
+  } catch (e) {
+    console.error("syncBadgeFromList failed", e);
+  }
+}
+
+btnPrices?.addEventListener("click", () => {
+  const dlg = document.getElementById("dlgPrices");
+  if (!dlg) return alert("Δεν βρέθηκε dlgPrices στο HTML.");
+
+  api("/api/admin/prices", { method: "GET" })
+    .then((d) => {
+      $("price_a").value = String(d.price_a ?? "");
+      $("price_b").value = String(d.price_b ?? "");
+      $("price_c").value = String(d.price_c ?? "");
+    })
+    .catch((e) => {
+      if (!handle401(e)) alert(e.message || "Δεν μπόρεσα να φορτώσω τιμές");
+    });
+
+  // Safari fallback
+  if (typeof dlg.showModal === "function") dlg.showModal();
+  else dlg.setAttribute("open", "");
+});
+
+btnPricesSave?.addEventListener("click", async () => {
+  try {
+    const dlg = document.getElementById("dlgPrices");
+
+    const aStr = ($("price_a")?.value || "").trim();
+    const bStr = ($("price_b")?.value || "").trim();
+    const cStr = ($("price_c")?.value || "").trim();
+
+    const a = Number(aStr.replace(",", "."));
+    const b = Number(bStr.replace(",", "."));
+    const c = Number(cStr.replace(",", "."));
+
+    // validation: 0..500, real numbers allowed
+    const bad =
+      !Number.isFinite(a) || a < 0 || a > 500 ||
+      !Number.isFinite(b) || b < 0 || b > 500 ||
+      !Number.isFinite(c) || c < 0 || c > 500;
+
+    if (bad) {
+      pricesHint.textContent = "Βάλε αριθμούς 0–500 (επιτρέπονται δεκαδικά).";
+      pricesHint.className = "hint bad";
+      return;
+    }
+
+    // Save to server
+    const saved = await api("/api/admin/prices", {
+      method: "POST",
+      body: JSON.stringify({ price_a: a, price_b: b, price_c: c })
+    });
+
+    pricesHint.textContent = `OK ✅ ${saved.price_a} | ${saved.price_b} | ${saved.price_c}`;
+    pricesHint.className = "hint";
+
+    // close dialog (if supported)
+    if (dlg && typeof dlg.close === "function") dlg.close();
+
+  } catch (e) {
+    if (!handle401(e)) {
+      pricesHint.textContent = e?.message || "Σφάλμα αποθήκευσης";
+      pricesHint.className = "hint bad";
+    }
+  }
+});
+
+  btnRefresh.addEventListener("click", async () => {
+    try { await refreshList(); }
+    catch (e) {
+      if (!handle401(e)) rowsEl.innerHTML = `<tr><td colspan="4" class="muted">List error: ${String(e.message || "unknown")}</td></tr>`;
+    }
+  });
+
+rowsEl.addEventListener("click", (e) => {
+  // =========================
+  // LEAD: delete
+  // =========================
+  const leadDel = e.target.closest("button[data-lead-del]");
+  if (leadDel) {
+    const lead_id = leadDel.getAttribute("data-lead-del");
+    if (!confirm("Διαγραφή αιτήματος ενδιαφέροντος;")) return;
+
+    api("/api/admin/leads/delete", {
+      method: "POST",
+      body: JSON.stringify({ lead_id: Number(lead_id) })
+    })
+    .then(() => refreshList())
+    .catch(err => {
+      if (!handle401(err))
+        alert(err.message || "Lead delete failed");
+    });
+
+    return;
+  }
+
+  // =========================
+  // LEAD: convert -> create tokens
+  // =========================
+  const leadConvert = e.target.closest("button[data-lead-convert]");
+  if (leadConvert) {
+    const lead_id = leadConvert.getAttribute("data-lead-convert");
+
+    api("/api/admin/leads/convert", {
+      method: "POST",
+      body: JSON.stringify({ lead_id: Number(lead_id) })
+    })
+    .then((data) => {
+      const rawFormUrl = data?.urls?.form || "";
+	  const formUrl = rawFormUrl.startsWith("http")
+  ? rawFormUrl
+  : `https://weddingela.gr${rawFormUrl}`;
+
+      const tr = leadConvert.closest("tr");
+const toEmail =
+  tr?.querySelector("td:nth-child(2) .contactEmail")?.textContent?.trim() || "";
+const partnerRef =
+  tr?.querySelector(".btnPartner")?.textContent?.trim() ||
+  leadConvert.getAttribute("data-partner-ref") ||
+  data?.partner_ref ||
+  "";
+
+const priceText = partnerRef ? `${price_a}€ → ${price_b}€` : `${price_a}€`;
+const amount = partnerRef ? (price_b || 70) : price_a;
+
+if (toEmail && formUrl) {
+  openCreateMailto(toEmail, formUrl, priceText, amount);
+}
+
+      return refreshList();
+    })
+    .catch(err => {
+      if (!handle401(err))
+        alert(err.message || "Lead convert failed");
+    });
+
+    return;
+  }
+
+  // =========================
+  // EVENT: delete
+  // =========================
+  const delBtn = e.target.closest("button[data-del]");
+  if (delBtn)
+    return deleteEventFlow(delBtn.getAttribute("data-del") || "", delBtn);
+
+  // =========================
+  // EVENT: paid toggle
+  // =========================
+  const paidBtn = e.target.closest("button[data-paid-toggle]");
+  if (paidBtn)
+    return togglePaid(paidBtn);
+});
+  
+  document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    refreshList().catch(() => {});
+  }
+});
+  
+// auto-open panel + load list if we have a stored session
+if (ADMIN_SESSION) {
+  setAuthUI(true);
+  try {
+  const p = await api("/api/admin/prices", { method:"GET" });
+  price_a = Number(p.price_a ?? price_a);
+  price_b = Number(p.price_b ?? price_b);
+  price_c = Number(p.price_c ?? price_c);
+} catch {}
+  refreshList().catch(e => {
+    if (!handle401(e)) setLogin(String(e?.message || "List error"), false);
+  });
+} else {
+  setAuthUI(false);
+}
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => {
+        console.log('Admin SW registered', reg);
+      })
+      .catch(err => {
+        console.error('Admin SW registration failed', err);
+      });
+  });
+}
+</script>
+
+</body>
+</html>
